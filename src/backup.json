@@ -1,0 +1,629 @@
+{
+  "id": 21,
+  "name": "Bread - Pita",
+  "price": "7.69",
+  "desc": "Osteitis deformans in neoplastic diseases, unsp shoulder"
+},
+{
+  "id": 22,
+  "name": "Container Clear 8 Oz",
+  "price": "4.55",
+  "desc": "Child neglect or abandonment, confirmed, initial encounter"
+},
+{
+  "id": 23,
+  "name": "Bread - Sour Sticks With Onion",
+  "price": "1.83",
+  "desc": "Insect bite (nonvenomous) of unspecified hand, init encntr"
+},
+{
+  "id": 24,
+  "name": "Pork - Loin, Bone - In",
+  "price": "1.57",
+  "desc": "Mech compl of graft of urinary organ, subsequent encounter"
+},
+{
+  "id": 25,
+  "name": "Sparkling Wine - Rose, Freixenet",
+  "price": "7.60",
+  "desc": "Disp fx of neck of unsp metacarpal bone, init for opn fx"
+},
+{
+  "id": 26,
+  "name": "Pear - Asian",
+  "price": "5.57",
+  "desc": "Nondisp segmental fracture of shaft of right fibula, sequela"
+},
+{
+  "id": 27,
+  "name": "Pork Loin Bine - In Frenched",
+  "price": "3.57",
+  "desc": "Oth fx shaft of left tibia, subs for clos fx w delay heal"
+},
+{
+  "id": 28,
+  "name": "Muffin - Carrot Individual Wrap",
+  "price": "5.48",
+  "desc": "Oth shellfish poisoning, intentional self-harm, init encntr"
+},
+{
+  "id": 29,
+  "name": "Pepper - Chilli Seeds Mild",
+  "price": "5.38",
+  "desc": "Pasngr in 3-whl mv injured in clsn w ped/anml nontraf, init"
+},
+{
+  "id": 30,
+  "name": "Fish - Artic Char, Cold Smoked",
+  "price": "7.67",
+  "desc": "Carrier of infectious disease"
+},
+{
+  "id": 31,
+  "name": "Pizza Pizza Dough",
+  "price": "8.64",
+  "desc": "Displ transverse fx shaft of r fibula, 7thR"
+},
+{
+  "id": 32,
+  "name": "Onions - White",
+  "price": "5.29",
+  "desc": "Idiopathic pulmonary fibrosis"
+},
+{
+  "id": 33,
+  "name": "Lidsoupcont Rp12dn",
+  "price": "6.20",
+  "desc": "Other meniscus derangements"
+},
+{
+  "id": 34,
+  "name": "Sauce - Demi Glace",
+  "price": "5.94",
+  "desc": "Interstitial myositis, thigh"
+},
+{
+  "id": 35,
+  "name": "Cheese - Pied De Vents",
+  "price": "5.00",
+  "desc": "Encntr for mental health serv for spous or prtnr abuse prob"
+},
+{
+  "id": 36,
+  "name": "Steel Wool S.o.s",
+  "price": "9.69",
+  "desc": "Nondisp fx of base of 4th MC bone, r hand, init for opn fx"
+},
+{
+  "id": 37,
+  "name": "Cheese - Goat With Herbs",
+  "price": "0.38",
+  "desc": "Vertiginous syndromes in diseases classd elswhr, left ear"
+},
+{
+  "id": 38,
+  "name": "Ham - Smoked, Bone - In",
+  "price": "8.33",
+  "desc": "Ataxia, unspecified"
+},
+{
+  "id": 39,
+  "name": "Langers - Ruby Red Grapfruit",
+  "price": "5.59",
+  "desc": "Unsp car occupant injured in clsn w pick-up truck nontraf"
+},
+{
+  "id": 40,
+  "name": "Bar Energy Chocchip",
+  "price": "7.46",
+  "desc": "Toxic effect of contact w sea anemone, self-harm, sequela"
+},
+{
+  "id": 41,
+  "name": "Soup Campbells Split Pea And Ham",
+  "price": "8.81",
+  "desc": "Corrosion of first degree of ear [any part, except ear drum]"
+},
+{
+  "id": 42,
+  "name": "Plaintain",
+  "price": "2.47",
+  "desc": "Follicular lymphoma grade IIIa, intrathoracic lymph nodes"
+},
+{
+  "id": 43,
+  "name": "Kellogs Special K Cereal",
+  "price": "2.00",
+  "desc": "Leakage of unspecified vascular graft"
+},
+{
+  "id": 44,
+  "name": "Onion - Dried",
+  "price": "2.56",
+  "desc": "Poisoning by oth drugs acting on muscles, self-harm, init"
+},
+{
+  "id": 45,
+  "name": "Cheese - Parmesan Grated",
+  "price": "2.78",
+  "desc": "Toxic effect of venom of black widow spider, assault, subs"
+},
+{
+  "id": 46,
+  "name": "Soup - Campbells Mac N Cheese",
+  "price": "3.82",
+  "desc": "Congenital malformation of esophagus, unspecified"
+},
+{
+  "id": 47,
+  "name": "Juice - Tomato, 48 Oz",
+  "price": "2.06",
+  "desc": "Adverse effect of benzodiazepines, subsequent encounter"
+},
+{
+  "id": 48,
+  "name": "Nut - Pecan, Halves",
+  "price": "1.94",
+  "desc": "Nondisp trimalleolar fracture of unsp lower leg, sequela"
+},
+{
+  "id": 49,
+  "name": "Sloe Gin - Mcguinness",
+  "price": "3.14",
+  "desc": "Unsp fracture of right forearm, init for opn fx type 3A/B/C"
+},
+{
+  "id": 50,
+  "name": "Salmon - Atlantic, No Skin",
+  "price": "5.74",
+  "desc": "Disp fx of hook pro of hamate bone, unsp wrs, 7thB"
+},
+{
+  "id": 51,
+  "name": "Fish - Soup Base, Bouillon",
+  "price": "6.47",
+  "desc": "Enteropathic arthropathies, unspecified hip"
+},
+{
+  "id": 52,
+  "name": "Beef - Rib Roast, Capless",
+  "price": "0.98",
+  "desc": "Unsp fx head of right femur, subs for clos fx w routn heal"
+},
+{
+  "id": 53,
+  "name": "Pineapple - Regular",
+  "price": "2.31",
+  "desc": "Open bite of right lesser toe(s) w damage to nail, init"
+},
+{
+  "id": 54,
+  "name": "Chicken - Whole Roasting",
+  "price": "2.48",
+  "desc": "Disorders of muscle in diseases classified elsewhere, hand"
+},
+{
+  "id": 55,
+  "name": "Lid - 0090 Clear",
+  "price": "8.16",
+  "desc": "Person outside car inj in clsn w 2/3-whl mv in traf, sequela"
+},
+{
+  "id": 56,
+  "name": "Trout - Rainbow, Fresh",
+  "price": "6.28",
+  "desc": "Displ seg fx shaft of r femr, 7thR"
+},
+{
+  "id": 57,
+  "name": "Sobe - Cranberry Grapefruit",
+  "price": "5.41",
+  "desc": "External constriction of vagina and vulva, initial encounter"
+},
+{
+  "id": 58,
+  "name": "Coffee Guatemala Dark",
+  "price": "7.88",
+  "desc": "Stress fracture, right tibia, sequela"
+},
+{
+  "id": 59,
+  "name": "Jam - Apricot",
+  "price": "3.19",
+  "desc": "Poisoning by aminoglycosides, intentional self-harm"
+},
+{
+  "id": 60,
+  "name": "Ham - Proscuitto",
+  "price": "8.67",
+  "desc": "Disp fx of body of hamate bone, l wrs, 7thG"
+},
+{
+  "id": 61,
+  "name": "Mikes Hard Lemonade",
+  "price": "3.83",
+  "desc": "Unspecified injury of pelvis, sequela"
+},
+{
+  "id": 62,
+  "name": "Beans - Yellow",
+  "price": "1.37",
+  "desc": "Laceration of musc/fasc/tend triceps, left arm, init"
+},
+{
+  "id": 63,
+  "name": "Chocolate Eclairs",
+  "price": "6.40",
+  "desc": "Partial traumatic amputation of left midfoot"
+},
+{
+  "id": 64,
+  "name": "Beer - Sleemans Honey Brown",
+  "price": "9.34",
+  "desc": "Polyhydramnios, second trimester, not applicable or unsp"
+},
+{
+  "id": 65,
+  "name": "Wine - Chablis J Moreau Et Fils",
+  "price": "7.89",
+  "desc": "Other specified fracture of unspecified pubis, sequela"
+},
+{
+  "id": 66,
+  "name": "Veal - Leg",
+  "price": "5.33",
+  "desc": "Nondisplaced fracture of head of unspecified radius"
+},
+{
+  "id": 67,
+  "name": "Lamb - Shoulder",
+  "price": "4.20",
+  "desc": "Periprosth fx around internal prosth l elbow joint, init"
+},
+{
+  "id": 68,
+  "name": "Fennel",
+  "price": "0.31",
+  "desc": "Burn of third degree of left lower leg, sequela"
+},
+{
+  "id": 69,
+  "name": "Oil - Sunflower",
+  "price": "4.93",
+  "desc": "Lead-induced chronic gout, wrist"
+},
+{
+  "id": 70,
+  "name": "Flavouring - Raspberry",
+  "price": "1.28",
+  "desc": "Major lacerat femor vein at hip and thi lev, right leg, sqla"
+},
+{
+  "id": 71,
+  "name": "Tomato - Plum With Basil",
+  "price": "3.63",
+  "desc": "Respiratory conditions due to unspecified external agent"
+},
+{
+  "id": 72,
+  "name": "Squash - Pepper",
+  "price": "1.88",
+  "desc": "Puncture wound w/o foreign body of right breast, init encntr"
+},
+{
+  "id": 73,
+  "name": "Wine - Casablanca Valley",
+  "price": "3.98",
+  "desc": "Displ seg fx shaft of l femr, 7thM"
+},
+{
+  "id": 74,
+  "name": "Salmon - Whole, 4 - 6 Pounds",
+  "price": "0.45",
+  "desc": "Disp fx of head of right radius, init for opn fx type 3A/B/C"
+},
+{
+  "id": 75,
+  "name": "Lentils - Red, Dry",
+  "price": "0.48",
+  "desc": "Chronic postrheumatic arthropathy, unspecified wrist"
+},
+{
+  "id": 76,
+  "name": "Beef Dry Aged Tenderloin Aaa",
+  "price": "8.63",
+  "desc": "Gestational edema, complicating childbirth"
+},
+{
+  "id": 77,
+  "name": "Pork - Inside",
+  "price": "4.08",
+  "desc": "Unsp inj flexor musc/fasc/tend r mid finger at forarm lv"
+},
+{
+  "id": 78,
+  "name": "Salami - Genova",
+  "price": "5.32",
+  "desc": "Complete traumatic amputation at right hip joint, init"
+},
+{
+  "id": 79,
+  "name": "Steampan Lid",
+  "price": "8.96",
+  "desc": "Respiratory failure of newborn"
+},
+{
+  "id": 80,
+  "name": "Cleaner - Pine Sol",
+  "price": "5.59",
+  "desc": "Legal intervnt w firearm disch, suspect injured, subs"
+},
+{
+  "id": 81,
+  "name": "Truffle Cups - Red",
+  "price": "5.15",
+  "desc": "Prsn outsd pk-up/van inj in clsn w rail trn/veh nontraf,sqla"
+},
+{
+  "id": 82,
+  "name": "Squash - Pattypan, Yellow",
+  "price": "4.18",
+  "desc": "Other specified joint disorders, right elbow"
+},
+{
+  "id": 83,
+  "name": "Lobster - Baby, Boiled",
+  "price": "7.36",
+  "desc": "Sltr-haris Type III physl fx low end r femr, 7thD"
+},
+{
+  "id": 84,
+  "name": "Water - Perrier",
+  "price": "9.57",
+  "desc": "Complication of mesent art following a procedure, NEC, init"
+},
+{
+  "id": 85,
+  "name": "Tumeric",
+  "price": "5.27",
+  "desc": "Blister (nonthermal) of unsp part of neck, subs encntr"
+},
+{
+  "id": 86,
+  "name": "Nantucket Apple Juice",
+  "price": "7.83",
+  "desc": "Renal osteodystrophy"
+},
+{
+  "id": 87,
+  "name": "Appetizer - Lobster Phyllo Roll",
+  "price": "7.74",
+  "desc": "Puncture wound w foreign body of right upper arm, subs"
+},
+{
+  "id": 88,
+  "name": "Sugar - Splenda Sweetener",
+  "price": "6.44",
+  "desc": "Unsp inj flxr musc/fasc/tend r lit fngr at forarm lv, init"
+},
+{
+  "id": 89,
+  "name": "Syrup - Monin - Blue Curacao",
+  "price": "0.61",
+  "desc": "Matern care for oth or susp poor fetl grth, 2nd tri, fts1"
+},
+{
+  "id": 90,
+  "name": "Wine - Beringer Founders Estate",
+  "price": "4.47",
+  "desc": "Oth fracture of right lesser toe(s), init for opn fx"
+},
+{
+  "id": 91,
+  "name": "Syrup - Monin - Granny Smith",
+  "price": "1.90",
+  "desc": "Blastic NK-cell lymphoma"
+},
+{
+  "id": 92,
+  "name": "Ecolab - Lime - A - Way 4/4 L",
+  "price": "9.86",
+  "desc": "Burn unsp degree of head, face, and neck, unsp site, sequela"
+},
+{
+  "id": 93,
+  "name": "Chicken - Tenderloin",
+  "price": "6.60",
+  "desc": "Postproc hematoma of unsp and adnexa fol an opth procedure"
+},
+{
+  "id": 94,
+  "name": "Cup - 8oz Coffee Perforated",
+  "price": "4.47",
+  "desc": "Mycotic corneal ulcer"
+},
+{
+  "id": 95,
+  "name": "Cheese - Brie Roitelet",
+  "price": "8.41",
+  "desc": "Displ commnt fx shaft of rad, r arm, 7thB"
+},
+{
+  "id": 96,
+  "name": "Pastry - Chocolate Chip Muffin",
+  "price": "4.49",
+  "desc": "Disp fx of r tibial tuberosity, 7thQ"
+},
+{
+  "id": 97,
+  "name": "Mushroom - Chanterelle Frozen",
+  "price": "8.69",
+  "desc": "Retained (nonmagnetic) (old) foreign body in lens, right eye"
+},
+{
+  "id": 98,
+  "name": "Veal - Provimi Inside",
+  "price": "1.21",
+  "desc": "Lacerat extensor musc/fasc/tend r rng fngr at wrs/hnd lv"
+},
+{
+  "id": 99,
+  "name": "Pork - Hock And Feet Attached",
+  "price": "7.52",
+  "desc": "Nondisp fx of epiphy (separation) (upper) of r femr, 7thR"
+},
+{
+  "id": 100,
+  "name": "Apple - Delicious, Red",
+  "price": "1.41",
+  "desc": "Burn of second degree of unspecified forearm"
+}
+
+
+      [
+  {
+    "code": "908191487",
+    "desc": "Underdosing of appetite depressants",
+    "id": 9,
+    "name": "Ham - Cooked Italian",
+    "offer_price": "2.10",
+    "price": "12.10",
+    "quantity": 1
+  },
+  {
+    "code": "908191487",
+    "desc": "Underdosing of appetite depressants",
+    "id": 9,
+    "name": "Ham - Cooked Italian",
+    "offer_price": "2.10",
+    "price": "12.10",
+    "quantity": 3
+  }
+],
+[
+  {
+    "code": "388731487",
+    "desc": "Nondisp fx of 4th metatarsal bone, unsp ft, 7thK",
+    "id": 3,
+    "name": "Veal - Loin",
+    "offer_price": "9.93",
+    "price": "19.93",
+    "quantity": 1
+  },
+  {
+    "code": "414496487",
+    "desc": "Nondisp fx of greater tuberosity of unsp humer, 7thP",
+    "id": 6,
+    "name": "Longos - Grilled Chicken With",
+    "offer_price": "4.46",
+    "price": "14.46",
+    "quantity": 1
+  },
+  {
+    "code": "388731487",
+    "desc": "Nondisp fx of 4th metatarsal bone, unsp ft, 7thK",
+    "id": 3,
+    "name": "Veal - Loin",
+    "offer_price": "9.93",
+    "price": "19.93",
+    "quantity": 1
+  }
+],
+[
+  [
+    "id": 1,
+    "total": "3.680"{
+      "code": "388731487",
+      "desc": "Nondisp fx of 4th metatarsal bone, unsp ft, 7thK",
+      "id": 3,
+      "name": "Veal - Loin",
+      "offer_price": "9.93",
+      "price": "19.93",
+      "quantity": 1
+    },
+    {
+      "code": "727255487",
+      "desc": "Passenger in hv veh injured in clsn w 2/3-whl mv in traf",
+      "id": 2,
+      "name": "Nestea - Iced Tea",
+      "offer_price": "5.32",
+      "price": "15.32",
+      "quantity": 1
+    },
+    {
+      "code": "732420487",
+      "desc": "Congenital subglottic stenosis",
+      "id": 5,
+      "name": "Crab - Soft Shell",
+      "offer_price": "6.88",
+      "price": "16.88",
+      "quantity": 1
+    }
+  ],
+  [
+    {
+      "code": "388731487",
+      "desc": "Nondisp fx of 4th metatarsal bone, unsp ft, 7thK",
+      "id": 3,
+      "name": "Veal - Loin",
+      "offer_price": "9.93",
+      "price": "19.93",
+      "quantity": 1
+    },
+    {
+      "code": "727255487",
+      "desc": "Passenger in hv veh injured in clsn w 2/3-whl mv in traf",
+      "id": 2,
+      "name": "Nestea - Iced Tea",
+      "offer_price": "5.32",
+      "price": "15.32",
+      "quantity": 1
+    },
+    {
+      "code": "732420487",
+      "desc": "Congenital subglottic stenosis",
+      "id": 5,
+      "name": "Crab - Soft Shell",
+      "offer_price": "6.88",
+      "price": "16.88",
+      "quantity": 1
+    }
+  ]
+  {
+    "created_at": "2022-12-16T04:29:25.626Z",
+    "id": 16,
+    "invoice_number": 642439,
+    "items": [
+      {
+        "code": 272445,
+        "desc": "Hdutsu jfiyd yidu",
+        "id": 6,
+        "name": "Ykyut khdjtw",
+        "offer_price": "358",
+        "price": "462",
+        "quantity": 1
+      },
+      {
+        "code": 698085,
+        "desc": "Tsur itditd iydit",
+        "id": 5,
+        "name": "Cyoxy",
+        "offer_price": "238",
+        "price": "542",
+        "quantity": 1
+      },
+      {
+        "code": 598938,
+        "desc": "Desc3",
+        "id": 4,
+        "name": "Test3",
+        "offer_price": "275",
+        "price": "986",
+        "quantity": 1
+      }
+    ],
+    "price": "1990.00",
+    "status": "active",
+    "title": "POS Invoice"
+  }
+]
