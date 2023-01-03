@@ -4,24 +4,37 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS, ROUTES } from "../../constants";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import CheckIcon from "../../assets/icons/check.gif";
+import Loading from "../../components/Loading";
+import Cart from '../../assets/icons/shopping-cart.png';
 
 const Success = ({navigation}) => {
     const [iconSize, setIconSize] = useState(0);
+    const [invoiceData, setInvoiceData] = useState({});
+    const [invoiceTotal, setInvoiceTotal] = useState('');
+    const [loading, setLoading] = useState(true);
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
     }
-
     const cartEmpty = async () => {
         await AsyncStorage.setItem('items', JSON.stringify([]))
         await AsyncStorage.setItem('total', JSON.stringify(0))
     }
 
+    const getInvoiceData = async () => {
+        const INVOICES = JSON.parse(await AsyncStorage.getItem('invoices'))
+        setInvoiceData(INVOICES.slice(INVOICES.length-1, INVOICES.length)[0])
+        setInvoiceTotal(INVOICES.slice(INVOICES.length-1, INVOICES.length)[0].price)
+        setLoading()
+    }
+
     useEffect(() => {
         cartEmpty()
+        getInvoiceData()
         wait(100).then(() => setIconSize(100));
     }, [])
     return(
-        <>
+        <>{
+            (loading)?<Loading />:
             <View style={styles.successWrapper}>
                 <View style={{
                     display: 'flex',
@@ -51,33 +64,35 @@ const Success = ({navigation}) => {
                     <Text style={styles.payDesc}>Please help us with our products reviews</Text>
                 </View>
                 <View style={styles.invoiceItems}>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Blue Shose</Text>
-                        <Text style={styles.price}>EGP 350,00</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Blue Shose</Text>
-                        <Text style={styles.price}>EGP 350,00</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Blue Shose</Text>
-                        <Text style={styles.price}>EGP 350,00</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Blue Shose</Text>
-                        <Text style={styles.price}>EGP 350,00</Text>
-                    </View>
+                    <ScrollView>
+                    {
+                        invoiceData.items.map(row => {
+                            return(
+                                <View style={styles.row} key={row.id}>
+                                    <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                        <View style={{width: 30, height: 30, marginRight: 10, padding: 5, backgroundColor: COLORS.main_bg, borderRadius: 5}}>
+                                            <Image source={(row.image)?{uri: row.image}:Cart} style={{width: '100%', height: '100%'}} />
+                                        </View>
+                                        <Text style={styles.label}>{row.name}</Text>
+                                    </View>
+                                    <Text style={styles.price}>EGP {parseFloat((row.offer_status == 1)?row.offer_price:row.price).toFixed(2)}</Text>
+                                </View>
+                            )
+                        })
+                    }
+                    </ScrollView>
                     <View style={[styles.row, styles.total]}>
                         <Text style={styles.label}>Total</Text>
-                        <Text style={styles.price}>EGP 1150</Text>
+                        <Text style={styles.price}>EGP {invoiceTotal}</Text>
                     </View>
                 </View>
                 <View>
-                <TouchableOpacity style={styles.goTo} onPress={() => navigation.navigate(ROUTES.HOME)}>
-                    <Text style={{color: COLORS.white}}>Back To Home</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.goTo} onPress={() => navigation.navigate(ROUTES.HOME)}>
+                        <Text style={{color: COLORS.white}}>Back To Home</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
+        }
         </>
     )
 }
@@ -139,7 +154,8 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 5,
         shadowColor: COLORS.grayLight,
-        elevation: 8
+        elevation: 8,
+        maxHeight: 350
     },
     row: {
         display: 'flex',

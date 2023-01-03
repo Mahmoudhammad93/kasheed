@@ -23,7 +23,11 @@ function BottomTabNavigator() {
 
   const getCartCount = async () => {
     const cart = await AsyncStorage.getItem('items');
-    setCartCount(JSON.parse(cart).length)
+    if(JSON.parse(cart) != null){
+      setCartCount(JSON.parse(cart).length)
+    }else{
+      setCartCount(0)
+    }
   }
 
   useEffect(() => {
@@ -67,13 +71,13 @@ function BottomTabNavigator() {
         name={ROUTES.WALLET}
         component={Wallet}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={ROUTES.CART}
         component={Cart}
         options={{
           tabBarButton: props => <CustomTabBarButton route="cart" cartCount={cartCount} {...props} />,
         }}
-      />
+      /> */}
       <Tab.Screen
         name={ROUTES.My_PROFILE}
         component={MyProfile}

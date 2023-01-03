@@ -43,7 +43,7 @@ const InvoiceList = (props) => {
             </View>
             <View style={styles.invoiceDetails}>
                 <Text style={styles.invoiceTitle} numberOfLines={2}>{props.data.title}</Text>
-                <Text style={[styles.invoiceStatus, styles.paidStatus, {backgroundColor: props.data.color, color: (props.data.status === 'pending')?COLORS.black:COLORS.white}]}>{props.data.status}</Text>
+                <Text style={[styles.invoiceStatus, styles.paidStatus, {backgroundColor: props.data.color, color: (props.data.status === 'pending')?COLORS.black:COLORS.white}]}>{(props.data.status == 'faild')?'Cancelled':props.data.status}</Text>
             </View>
         </View>
         <View style={styles.invoicePrice}>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         padding: 5,
         borderRadius: 5,
         fontSize: 12,
-        width: 50,
+        width: 60,
         fontWeight: 'bold',
         textTransform: 'capitalize'
       },

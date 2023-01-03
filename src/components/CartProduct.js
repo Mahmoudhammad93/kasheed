@@ -9,6 +9,16 @@ import routes from '../constants/routes';
 
 const CartProduct = (props) => {
     const [quantity, setQuantity] = useState("1");
+    const [price, setPrice] = useState('');
+    const item = props.item;
+
+    const getPrice = () => {
+        if(item.offer_status == 1){
+            setPrice(item.offer_price)
+        }else{
+            setPrice(item.price)
+        }
+    }
 
     const plus = async (item) => {
         var cart = await AsyncStorage.getItem('items');
@@ -19,20 +29,25 @@ const CartProduct = (props) => {
             if(row.id != item.id){
                 return row
             }
+        })
 
-            if(row.id === item.id){
-                item.quantity = row.quantity+1
+        var ITEM_Q = arr.filter(row => {
+            if(row.id == item.id){
+                return row;
             }
         })
+
+        item.quantity = ITEM_Q[0].quantity+1;
+
         await AsyncStorage.setItem('items', JSON.stringify([...newArr, item]));
 
         setQuantity(parseInt(quantity) + 1)
 
         var totalPrice;
         if(currentTotal){
-            totalPrice = parseFloat(currentTotal) + parseFloat(item.price);
+            totalPrice = parseFloat(currentTotal) + parseFloat(price);
         }else{
-            totalPrice = parseFloat(item.price)
+            totalPrice = parseFloat(price)
         }
         await AsyncStorage.setItem('total', JSON.stringify(totalPrice));
         props.updateTotal(totalPrice)
@@ -48,20 +63,25 @@ const CartProduct = (props) => {
                 if(row.id != item.id){
                     return row
                 }
+            })
 
-                if(row.id === item.id){
-                    item.quantity = row.quantity-1
+            var ITEM_Q = arr.filter(row => {
+                if(row.id == item.id){
+                    return row;
                 }
             })
+
+            item.quantity = ITEM_Q[0].quantity-1;
+    
             await AsyncStorage.setItem('items', JSON.stringify([...newArr, item]));
 
             setQuantity(parseInt(quantity) - 1)
 
             var totalPrice;
             if(currentTotal){
-                totalPrice = parseFloat(currentTotal) - parseFloat(item.price);
+                totalPrice = parseFloat(currentTotal) - parseFloat(price);
             }else{
-                totalPrice = parseFloat(item.price)
+                totalPrice = parseFloat(price)
             }
             await AsyncStorage.setItem('total', JSON.stringify(totalPrice));
             props.updateTotal(totalPrice)
@@ -82,7 +102,7 @@ const CartProduct = (props) => {
         await AsyncStorage.setItem('items', JSON.stringify(newArr));
         var totalPrice;
         if(currentTotal){
-            var productPrice = parseFloat(item.price) * parseFloat(item.quantity);
+            var productPrice = parseFloat(price) * parseFloat(item.quantity);
             totalPrice = parseFloat(currentTotal) - productPrice;
         }
         await AsyncStorage.setItem('total', JSON.stringify(totalPrice));
@@ -91,33 +111,34 @@ const CartProduct = (props) => {
     }
 
     useEffect(() => {
-        setQuantity(props.item.quantity)
+        setQuantity(item.quantity)
+        getPrice()
     }, []);
 
   return (
     <View style={styles.cartProduct}>
         <View style={styles.imageRow}>
-            <TouchableOpacity onPress={() => props.navigation.navigate(routes.PRODUCT_DETAILS, {product: props.item})} style={styles.productImage}>
-                <Image source={productImage} style={styles.image}/>
+            <TouchableOpacity onPress={() => props.navigation.navigate(routes.PRODUCT_DETAILS, {product: item})} style={styles.productImage}>
+                <Image source={(item.image)?{uri: item.image}:productImage} style={styles.image}/>
             </TouchableOpacity>
         </View>
         <View style={styles.productDetails}>
             <View style={styles.nameRow}>
-                <Text style={styles.productName} numberOfLines={1}>{props.item.id}# {props.item.name}</Text>
-                <Text style={styles.productprice}>EGP {parseFloat((quantity == 1)?props.item.price: props.item.price*quantity).toFixed(2)}</Text>
+                <Text style={styles.productName} numberOfLines={1}>{item.id}# {item.name}</Text>
+                <Text style={styles.productprice}>EGP {parseFloat((quantity == 1)?price: price*quantity).toFixed(2)} ({quantity}X{price})</Text>
             </View>
             <View style={styles.quantity}>
                 <View style={styles.quantityBtns}>
-                    <TouchableOpacity style={[styles.qBtns ,styles.minusBtn]} onPress={() => minus(props.item)}>
+                    <TouchableOpacity style={[styles.qBtns ,styles.minusBtn]} onPress={() => minus(item)}>
                         <AntDesign name='minus' size={15} color={COLORS.white} style={[styles.quantityBtn]}/>
                     </TouchableOpacity>
                     <Text style={styles.quantityInput}>{quantity}</Text>
-                    <TouchableOpacity style={[styles.qBtns ,styles.plusBtn]} onPress={() => plus(props.item)}>
+                    <TouchableOpacity style={[styles.qBtns ,styles.plusBtn]} onPress={() => plus(item)}>
                         <AntDesign name='plus' size={15} color={COLORS.white} style={[styles.quantityBtn]}/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.removeBtnRow}>
-                    <TouchableOpacity style={styles.removeBtn} onPress={() => removeItem(props.item)}>
+                    <TouchableOpacity style={styles.removeBtn} onPress={() => removeItem(item)}>
                         <Entypo name='trash' size={25} color={COLORS.main_color} style={styles.removeBtnIcon} />
                         <Text style={styles.removeText}>Remove</Text>
                     </TouchableOpacity>
@@ -155,7 +176,7 @@ const styles = StyleSheet.create({
     image: {
         width: "100%",
         height: "100%",
-        resizeMode: 'contain'
+        resizeMode: 'cover'
     },
     productDetails: {
         width: "80%"

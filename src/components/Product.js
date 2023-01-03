@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Product = (props) => {
     const [total, setTotal] = useState(0);
-
+    const product = props.product;
 
     const handleAddProduct = async (item, index) => {
       var currentTotal = await AsyncStorage.getItem('total');
@@ -19,12 +19,11 @@ const Product = (props) => {
       var cartItem = await AsyncStorage.getItem('cart_item');
       var currentQ = await AsyncStorage.getItem('item_quantity')
 
-      // console.log(JSON.parse(currentItems))
-      if(JSON.parse(currentItems).length > 0){
+      if(JSON.parse(currentItems) != null && JSON.parse(currentItems).length > 0){
         JSON.parse(currentItems).forEach(async function(row, index) {
             if(row.id === item.id){
               await AsyncStorage.setItem('item_quantity', JSON.stringify(row.quantity))
-              item.quantity = parseInt(currentQ)+1;
+              item.quantity = row.quantity+1;
               const newArray = JSON.parse(currentItems).filter(e => {
                 if(e.id !== item.id){
                   return e;
@@ -75,7 +74,11 @@ const Product = (props) => {
       
       var totalPrice;
       if(currentTotal){
-        totalPrice = parseFloat(currentTotal) + parseFloat(item.price);
+        if(item.offer_status == 1){
+          totalPrice = parseFloat(currentTotal) + parseFloat(item.offer_price);
+        }else{
+          totalPrice = parseFloat(currentTotal) + parseFloat(item.price);
+        }
       }else{
         totalPrice = parseFloat(item.price)
       }
@@ -92,15 +95,24 @@ const Product = (props) => {
     <TouchableOpacity style={styles.product} onPress={() => handleAddProduct(props.product, props.index)}>
         <View >
             <View style={styles.productImg}>
-                <Image source={Cart} style={styles.Image}/>
+                <Image source={(product.image)?{uri: product.image}:Cart} style={styles.Image}/>
+                {
+                  (product.offer_status == 1)?
+                  <Text style={styles.offerMark}></Text>:''
+                }
             </View>
             <View style={styles.productDetails}>
                 <Text style={styles.productName} numberOfLines={1}>
-                {props.product.name}
+                {product.name}
                 </Text>
-                <Text style={styles.productPrice}>
-                EGP {props.product.price}
+                <Text style={[styles.productPrice, (product.offer_status == 1)?{color: COLORS.grayLight, textDecorationLine: 'line-through', fontSize: 12}:'']}>
+                EGP {parseFloat(product.price).toFixed(2)}
                 </Text>
+                {
+                  (product.offer_status == 1)?<Text style={styles.productPrice}>
+                  EGP {parseFloat(product.offer_price).toFixed(2)}
+                  </Text>:''
+                }
             </View>
         </View>
         <Toast/>
@@ -113,7 +125,7 @@ export default Product;
 const styles = StyleSheet.create({
     product:{
         width: "30%",
-        height: 170,
+        height: 190,
         borderRadius: 5,
         shadowColor: COLORS.dark,
         shadowOpacity: 1,
@@ -130,7 +142,17 @@ const styles = StyleSheet.create({
       },
       Image:{
         width: "100%",
-        height: "100%"
+        height: "100%",
+        resizeMode: 'cover'
+      },
+      offerMark:{
+        position: 'absolute',
+        top: -5,
+        right: -20,
+        width: 50,
+        height: 20,
+        backgroundColor: '#fab60b',
+        transform: [{rotate: '42deg'}]
       },
       productDetails:{
         backgroundColor: COLORS.white,

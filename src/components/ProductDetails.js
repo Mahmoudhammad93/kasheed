@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Product = (props) => {
     const [total, setTotal] = useState(0);
+    const product = props.product;
     const handleAddProduct = async (item) => {
       var currentTotal = await AsyncStorage.getItem('total');
       var totalPrice;
@@ -28,15 +29,25 @@ const Product = (props) => {
     <TouchableOpacity style={styles.product} onPress={() => props.navigation.navigate(ROUTES.PRODUCT_DETAILS, {product: props.product})}>
         <View >
             <View style={styles.productImg}>
-                <Image source={Cart} style={styles.Image}/>
+                <Image source={(product.image)?{uri: product.image}:Cart} style={styles.Image}/>
+                {
+                  (product.offer_status == 1)?
+                  <Text style={styles.offerMark}></Text>:''
+                }
             </View>
             <View style={styles.productDetails}>
-                <Text style={styles.productName} numberOfLines={1}>
-                  {props.product.name}
+            <Text style={styles.productName} numberOfLines={1}>
+                {product.name}
                 </Text>
-                <Text style={styles.productPrice}>
-                  EGP {props.product.price}
+                <Text style={[styles.productPrice, (product.offer_status == 1)?{color: COLORS.grayLight, textDecorationLine: 'line-through', fontSize: 12}:'']}>
+                EGP {parseFloat(product.price).toFixed(2)}
                 </Text>
+                {
+                  (product.offer_status == 1)?<Text style={styles.productPrice}>
+                  EGP {parseFloat(product.offer_price).toFixed(2)}
+                  </Text>:''
+                }
+                
             </View>
         </View>
         <Toast/>
@@ -49,7 +60,7 @@ export default Product;
 const styles = StyleSheet.create({
     product:{
         width: "30%",
-        height: 170,
+        height: 190,
         borderRadius: 5,
         shadowColor: COLORS.dark,
         shadowOpacity: 1,
@@ -67,6 +78,15 @@ const styles = StyleSheet.create({
       Image:{
         width: "100%",
         height: "100%"
+      },
+      offerMark:{
+        position: 'absolute',
+        top: -5,
+        right: -20,
+        width: 50,
+        height: 20,
+        backgroundColor: '#fab60b',
+        transform: [{rotate: '42deg'}]
       },
       productDetails:{
         backgroundColor: COLORS.white,

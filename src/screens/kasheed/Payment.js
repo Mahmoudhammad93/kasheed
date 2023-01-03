@@ -21,14 +21,22 @@ import Data from "../../data.json";
 const FULL_WIDTH = Dimensions.get('window').width;
 const FULL_HEIGHT = Dimensions.get('window').height;
 
-const Payment = ({navigation}) => {
+const Payment = ({navigation, ...props}) => {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [methodActive, setMethodActive] = useState('creadit');
 
     const getPaymentData = async () => {
         const total = await AsyncStorage.getItem('total');
-        setTotal(total)
+        // console.log(props.route.params)
+        if(props.route.params){
+            const PARAMS = props.route.params;
+            if(PARAMS.type == 'pending'){
+                setTotal(PARAMS.invoice.price)
+            }
+        }else{
+            setTotal(total)
+        }
         setLoading(false)
     }
 
@@ -65,6 +73,14 @@ const Payment = ({navigation}) => {
         }
     }
 
+    const getInvoiceStatus = () => {
+        if(methodActive == 'cash'){
+            return "pending"
+        }else{
+            return "paid"
+        }
+    }
+
     const submitPayment = async () => {
         var cart = await AsyncStorage.getItem('items');
         var currentInvoices = await AsyncStorage.getItem('invoices');
@@ -73,9 +89,12 @@ const Payment = ({navigation}) => {
         const currentInvoicesArray = JSON.parse(currentInvoices)
 
         if(currentInvoicesArray != null){
-            var itemIndex = currentInvoicesArray.length+1;
+            var itemIndex = currentInvoicesArray.length;
+            var latestInvoice = currentInvoicesArray.slice(itemIndex-1, itemIndex);
+            var invoiceID = latestInvoice[0].id+1;
+
         }else{
-            var itemIndex = 1;
+            var invoiceID = 1;
         }
 
         var today = new Date();
@@ -87,26 +106,39 @@ const Payment = ({navigation}) => {
         var time = today.getUTCDay();
 
         const invoice = {
-            id: itemIndex,
+            id: invoiceID,
             title: "User Invoice",
             invoice_number: Math.floor(100000 + Math.random() * 900000),
-            status: "active",
+            status: getInvoiceStatus(),
             price: parseFloat(currentTotal).toFixed(2),
             created_at: today,
-            items: cartArray
+            items: (props.route.params)?props.route.params.invoice.items:cartArray
         }
 
+        if(props.route.params){
+            const PARAMS = props.route.params;
+            const newArr = currentInvoicesArray.filter(row => {
+                if(row.id != PARAMS.invoice.id){
+                    return row;
+                }
+            })
 
-        if(currentInvoicesArray != null){
-            if(currentInvoicesArray.length <= 0){
-                await AsyncStorage.setItem('invoices', JSON.stringify([invoice]));
-            }else{
-                await AsyncStorage.setItem('invoices', JSON.stringify([...currentInvoicesArray, invoice]));
-            }
+            PARAMS.invoice.status = "paid";
+
+            await AsyncStorage.setItem('invoices', JSON.stringify([...newArr, PARAMS.invoice]));
+            navigation.navigate(ROUTES.SUCCESS, {invoice: PARAMS.invoice})
         }else{
-            await AsyncStorage.setItem('invoices', JSON.stringify([invoice]));
+            if(currentInvoicesArray != null){
+                if(currentInvoicesArray.length <= 0){
+                    await AsyncStorage.setItem('invoices', JSON.stringify([invoice]));
+                }else{
+                    await AsyncStorage.setItem('invoices', JSON.stringify([...currentInvoicesArray, invoice]));
+                }
+            }else{
+                await AsyncStorage.setItem('invoices', JSON.stringify([invoice]));
+            }
+            navigation.navigate(ROUTES.SUCCESS)
         }
-        navigation.navigate(ROUTES.SUCCESS)
     }
 
     useEffect(() => {
@@ -136,7 +168,10 @@ const Payment = ({navigation}) => {
                                         <PaymentMethods methodName={'vodafone'} methodActive={methodActive} selectPaymentMethod={selectPaymentMethod} icon={(methodActive == 'vodafone')?VodafoneLight:VodafoneDark} btnText={'Vodafone Cash'}/>
 
                                         {/* // Cash on delivery payment method */}
-                                        <PaymentMethods methodName={'cash'} methodActive={methodActive} selectPaymentMethod={selectPaymentMethod} icon={(methodActive == 'cash')?CashLight:CashDark} btnText={'Cash On Delivery'}/>
+                                        {
+                                            (props.route.params && props.route.params.invoice.status == 'pending')?'':
+                                            <PaymentMethods methodName={'cash'} methodActive={methodActive} selectPaymentMethod={selectPaymentMethod} icon={(methodActive == 'cash')?CashLight:CashDark} btnText={'Cash On Delivery'}/>
+                                        }
                                     </ScrollView>
                                 </View>
                                 {payMethodForm()}

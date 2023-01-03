@@ -8,6 +8,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import SwipeUpDownModal from 'react-native-swipe-modal-up-down';
 import PopupAlert from '../../components/PopupAlert';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { sort_by_id } from '../../constants/helper';
 
 const FULL_WIDTH = Dimensions.get('window').width;
 const FULL_HEIGHT = Dimensions.get('window').height;
@@ -20,11 +22,49 @@ const ProductDetails = (props) => {
   const [statusChecked, setStatusChecked] = useState(1);
   const [offerStatusChecked, setOfferStatusChecked] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
+  const [categoryName, setCategoryName] = useState('');
+  const [showCategories, setShowCategories] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [productImage, setProductImage] = useState("https://assets.gelecegenefes.com/images/no-image.jpeg");
 
   const product = props.route.params.product;
 
-  const getProduct = () => {
+  const getProduct = async () => {
+    const CATEGORIES = JSON.parse(await AsyncStorage.getItem('categories'))
+
+    const cate = CATEGORIES.filter(row => {
+      if(row.id == product.category_id){
+        return row
+      }
+    })
+    
+    if(CATEGORIES && CATEGORIES.length > 0){
+      setCategories(CATEGORIES.sort(sort_by_id()))
+    }else{
+      setCategories([])
+    }
+
+    console.log(cate)
+    if(cate.length > 0){
+      setCategoryName(cate[0].name)
+    }else{
+      setCategoryName('')
+    }
     setProductData(product)
+    console.log(product)
+  }
+
+  const selectCategory = async (id) => {
+    const CATEGORIES = JSON.parse(await AsyncStorage.getItem('categories'))
+
+    const cate = CATEGORIES.filter(row => {
+      if(row.id == id){
+        return row
+      }
+    })
+    setProductData({...productData, category_id:id})
+    setCategoryName(cate[0].name)
+    setShowCategories(false)
   }
 
   const editProduct = () => {
@@ -51,9 +91,28 @@ const ProductDetails = (props) => {
       }
     })
 
+    console.log(productData)
+
     await AsyncStorage.setItem('products', JSON.stringify([...NEW_ARR, productData]));
 
     openModalPopup()
+  }
+
+  const options = {
+    title: 'Select Image',
+    type: 'library',
+    options:{
+      maxHeight: 200,
+      maxWidth: 200,
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false,
+    }
+  }
+  const openGallery = async () => {
+    const image = await launchImageLibrary(options)
+    setProductImage(image.assets[0].uri)
+    setProductData({...productData, image: image.assets[0].uri})
   }
 
   const openModalPopup = () => {
@@ -87,12 +146,18 @@ const ProductDetails = (props) => {
               (productData.offer_status == 1)?
               <Text style={styles.priceBadge}>EGP {productData.offer_price}</Text>:''
             }
-            <Image source={ProductImage} style={styles.image}/>
+            <Image source={(productData.image)?{uri: productData.image}:ProductImage} style={styles.image}/>
           </View>
           <View style={styles.productDetails}>
             <View style={styles.nameAndPrice}>
               <Text style={styles.productName}>{productData.name}</Text>
-              <Text style={styles.productPrice}>EGP {productData.price}</Text>
+              <View>
+                {
+                  (productData.offer_status == 1)?
+                  <Text style={styles.productPrice}>EGP {parseFloat(productData.offer_price).toFixed(2)}</Text>:""
+                }
+              <Text style={[styles.productPrice, (productData.offer_status == 1)?{color: COLORS.grayLight, textDecorationLine: 'line-through', fontSize: 12}:'']}>EGP {parseFloat(productData.price).toFixed(2)}</Text>
+              </View>
             </View>
             <Text style={styles.productDesc}>{productData.desc}</Text>
             <View style={styles.moreDetails}>
@@ -108,17 +173,23 @@ const ProductDetails = (props) => {
               <Text style={styles.detailsValue}>
                 {productData.code}
               </Text>
+              <Text style={styles.detailsLabel}>
+                Category
+              </Text>
+              <Text style={styles.detailsValue}>
+                {categoryName} - {productData.category_id}
+              </Text>
             </View>
           </View>
         </View>
         <View style={styles.options}>
           <TouchableOpacity style={[styles.optionBtn, {backgroundColor: COLORS.active_color}]} onPress={()=> editProduct()}>
             <FontAwesome name='edit' size={25} color={COLORS.white} style={{marginRight: 15}}/>
-            <Text>Edit</Text>
+            <Text style={{color: COLORS.white}}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.optionBtn, {backgroundColor: COLORS.danger}]}>
             <FontAwesome name='trash' size={25} color={COLORS.white} style={{marginRight: 15}}/>
-            <Text>Delete</Text>
+            <Text style={{color: COLORS.white}}>Delete</Text>
           </TouchableOpacity>
           <SwipeUpDownModal
               modalVisible={ShowComment}
@@ -139,7 +210,9 @@ const ProductDetails = (props) => {
                   <View style={styles.row}>
                         <View style={styles.col_6}>
                           <TouchableOpacity style={styles.selectImageBtn} onPress={() => openGallery()}>
-                            <Entypo name='image' size={30} color={COLORS.grayLight} />
+                          <View style={styles.formImage}>
+                              <Image style={{width: '100%', height: '100%', resizeMode: 'cover'}} source={{uri:productImage}} />
+                            </View>
                             <Text style={{color: COLORS.grayLight}}>Select Image</Text>
                           </TouchableOpacity>
                         </View>
@@ -162,6 +235,28 @@ const ProductDetails = (props) => {
                             />
                         </View>
                         <View style={styles.col_6}>
+                          <TextInput placeholder="Category" style={styles.formInput} placeholderTextColor={COLORS.gray}
+                            onChangeText={(text) => {setProductData({...productData, category_id: text})}}
+                            onFocus={()=> setShowCategories(true)}
+                            value={categoryName}
+                            />
+                            {
+                              (showCategories)?<View style={styles.cateResult}>
+                              <ScrollView>
+                              {
+                                categories.map(cate => {
+                                  return(
+                                    <TouchableOpacity key={cate.id} style={styles.resultOption} onPress={()=> selectCategory(cate.id)}>
+                                      <Text style={{color: COLORS.gray}}>{cate.name}</Text>
+                                    </TouchableOpacity>
+                                  )
+                                })
+                              }
+                              </ScrollView>
+                            </View>:''
+                            }
+                        </View>
+                        <View style={styles.col_12}>
                             <TextInput placeholder="Offer Price" keyboardType='numeric' style={styles.formInput} placeholderTextColor={COLORS.gray}
                             onChangeText={(text) => {setProductData({...productData, offer_price: text})}}
                             value={(productData.offer_price)?productData.offer_price:''}
@@ -258,7 +353,7 @@ const styles = StyleSheet.create({
   },
   productBox:{
     backgroundColor: COLORS.white,
-    height: FULL_HEIGHT/2,
+    height: FULL_HEIGHT/1.38,
     borderRadius: 5,
     overflow: 'hidden',
     position: 'relative',
@@ -274,11 +369,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     padding: 10,
-    color: COLORS.white
+    color: COLORS.white,
+    zIndex: 99999
   },
   productImage:{
     width: "100%",
-    height: "55%",
+    height: "60%",
     padding: 10,
     display: 'flex',
     alignItems: 'center',
@@ -288,7 +384,7 @@ const styles = StyleSheet.create({
   image:{
     width: "100%",
     height: "100%",
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     
   },
   productDetails:{
@@ -404,6 +500,14 @@ formInput:{
     color: COLORS.gray,
     paddingHorizontal: 20
 },
+formImage:{
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  zIndex: 99999
+},
 pr_10:{
   paddingRight: 10
 },
@@ -474,4 +578,18 @@ searchIcon:{
   padding: 10,
   borderRadius: 5
 },
+cateResult:{
+  position: 'absolute',
+  backgroundColor: COLORS.white,
+  top: 52,
+  width: "100%",
+  zIndex: 9999,
+  shadowColor: COLORS.gray,
+  elevation: 5,
+  height: 200,
+  borderRadius: 5
+},
+resultOption:{
+  padding: 10
+}
 });

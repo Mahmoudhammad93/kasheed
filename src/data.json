@@ -592,67 +592,7 @@
         "status": 0
       },
       {
-        "id": 2,
-        "first_name": "Ragab",
-        "last_name": "Deaf",
-        "email": "ragabdeaf@gmail.com",
-        "username": "ragabdeaf20",
-        "password": "123456789",
-        "type": "user",
-        "status": 2
-      },
-      {
-        "id": 1,
-        "first_name": "Mahmoud",
-        "last_name": "Hammad",
-        "email": "mahmoudhammad423@gmail.com",
-        "username": "mahmoudhammad93",
-        "password": "123456789",
-        "type": "admin",
-        "status": 1
-      },
-      {
-        "id": 2,
-        "first_name": "Mahmoud",
-        "last_name": "Hamde",
-        "email": "mahmoudhammad93@gmail.com",
-        "username": "mahmoudhamde93",
-        "password": "123456789",
-        "type": "user",
-        "status": 0
-      },
-      {
-        "id": 2,
-        "first_name": "Ragab",
-        "last_name": "Deaf",
-        "email": "ragabdeaf@gmail.com",
-        "username": "ragabdeaf20",
-        "password": "123456789",
-        "type": "user",
-        "status": 2
-      },
-      {
-        "id": 1,
-        "first_name": "Mahmoud",
-        "last_name": "Hammad",
-        "email": "mahmoudhammad423@gmail.com",
-        "username": "mahmoudhammad93",
-        "password": "123456789",
-        "type": "admin",
-        "status": 1
-      },
-      {
-        "id": 2,
-        "first_name": "Mahmoud",
-        "last_name": "Hamde",
-        "email": "mahmoudhammad93@gmail.com",
-        "username": "mahmoudhamde93",
-        "password": "123456789",
-        "type": "user",
-        "status": 0
-      },
-      {
-        "id": 2,
+        "id": 3,
         "first_name": "Ragab",
         "last_name": "Deaf",
         "email": "ragabdeaf@gmail.com",
@@ -668,7 +608,7 @@
       "card_number": "5108751128321351",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 1,
       "card_type": "visa"
     }, {
@@ -677,7 +617,7 @@
       "card_number": "5108753902108913",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 2,
       "card_type": "mastercard"
     }, {
@@ -686,7 +626,7 @@
       "card_number": "5048378702840680",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 3,
       "card_type": "mastercard"
     }, {
@@ -695,7 +635,7 @@
       "card_number": "5108756237314429",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 4,
       "card_type": "mastercard"
     }, {
@@ -704,7 +644,7 @@
       "card_number": "5108755742768129",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 1,
       "card_type": "mastercard"
     }, {
@@ -713,7 +653,7 @@
       "card_number": "5048377732096255",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 6,
       "card_type": "mastercard"
     }, {
@@ -722,7 +662,7 @@
       "card_number": "5108754600743878",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 7,
       "card_type": "mastercard"
     }, {
@@ -731,7 +671,7 @@
       "card_number": "5048373758281046",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 8,
       "card_type": "mastercard"
     }, {
@@ -740,7 +680,7 @@
       "card_number": "5048374301454577",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 9,
       "card_type": "mastercard"
     }, {
@@ -749,7 +689,7 @@
       "card_number": "5108757361356293",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 10,
       "card_type": "mastercard"
     }, {
@@ -758,7 +698,7 @@
       "card_number": "5108757113969757",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 11,
       "card_type": "mastercard"
     }, {
@@ -767,7 +707,7 @@
       "card_number": "5048375865821663",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 12,
       "card_type": "mastercard"
     }, {
@@ -776,7 +716,7 @@
       "card_number": "5108750438303174",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 13,
       "card_type": "mastercard"
     }, {
@@ -785,7 +725,7 @@
       "card_number": "5108755972763402",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 14,
       "card_type": "mastercard"
     }, {
@@ -794,7 +734,7 @@
       "card_number": "5048371156354134",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 15,
       "card_type": "mastercard"
     }, {
@@ -803,7 +743,7 @@
       "card_number": "5048376398121373",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 16,
       "card_type": "mastercard"
     }, {
@@ -812,7 +752,7 @@
       "card_number": "5048375745635242",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 17,
       "card_type": "mastercard"
     }, {
@@ -821,7 +761,7 @@
       "card_number": "5108756451631862",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 18,
       "card_type": "mastercard"
     }, {
@@ -830,7 +770,7 @@
       "card_number": "5108759476686432",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 19,
       "card_type": "mastercard"
     }, {
@@ -839,7 +779,7 @@
       "card_number": "5108753736594965",
       "expire_date_m": "12",
       "expire_date_y": "24",
-      "csv": "235",
+      "csv": "235", 
       "user_id": 1,
       "card_type": "mastercard"
     }]

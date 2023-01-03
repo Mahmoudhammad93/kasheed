@@ -1,20 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import {StyleSheet, Text, SafeAreaView, View, Dimensions, ScrollView, TouchableOpacity} from 'react-native';
-import { COLORS } from '../../constants';
+import React, { useState, useEffect, useCallback } from 'react';
+import {StyleSheet, Image, Text, SafeAreaView, View, Dimensions, ScrollView, TouchableOpacity, RefreshControl} from 'react-native';
+import { COLORS, ROUTES } from '../../constants';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SwipeUpDownModal from 'react-native-swipe-modal-up-down';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loading from '../../components/Loading';
+import Cart from '../../assets/icons/shopping-cart.png';
+
+
 const FULL_WIDTH = Dimensions.get('window').width;
 const FULL_HEIGHT = Dimensions.get('window').height;
 
-const InvoiceDetails = (props) => {
+const InvoiceDetails = ({navigation, ...props}) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [invoiceDetails, setInvoiceDetails] = useState({});
   const [showInvProducts, setShowInvProducts] = useState(false);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  let [showOptionsModal, setShowOptionsModal] = useState(false);
+  let [animateOptionsModal, setanimateOptionsModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const invoice = props.route.params.invoice;
 
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
       "July", "Aug", "Sept", "Oct", "Nov", "Dec"
   ];
+
+  const getInvoiceData = async () => {
+    const INVOICES = JSON.parse(await AsyncStorage.getItem('invoices'))
+    const array = INVOICES.filter(row => {
+      if(row.id == invoice.id){
+        if(row.status === 'active'){
+          row.color = COLORS.active_color
+        }else if (row.status === 'paid'){
+          row.color = COLORS.main_color
+        }else if(row.status === 'pending'){
+          row.color = COLORS.warning_color
+        }else{
+          row.color = COLORS.danger
+        }
+        return row;
+      }
+    })
+
+    setInvoiceDetails(array[0])
+    setLoading(false)
+  }
 
   const getDate = () => {
     var DATE = new Date(invoice.created_at)
@@ -28,19 +61,85 @@ const InvoiceDetails = (props) => {
     (showInvProducts)?setShowInvProducts(false):setShowInvProducts(true)
   }
 
+  const openOptionsModal = () => {
+    setShowOptionsModal(true)
+  }
+
+  const closePopupModal = () => {
+    setShowOptionsModal(false);
+    setanimateOptionsModal(false);
+  }
+
+  const cancelInvoice = async (obj) => {
+    const INVOICES = JSON.parse(await AsyncStorage.getItem('invoices'))
+    const array = INVOICES.filter(row => {
+      if(row.id !== obj.id){
+        return row;
+      }
+    })
+
+    obj.status = 'faild';
+    await AsyncStorage.setItem('invoices', JSON.stringify([...array, obj]))
+    setShowOptionsModal(false)
+    onRefresh()
+  }
+
+  const deleteInvoice = async (obj) => {
+    const INVOICES = JSON.parse(await AsyncStorage.getItem('invoices'))
+    const array = INVOICES.filter(row => {
+      if(row.id !== obj.id){
+        return row;
+      }
+    })
+
+    navigation.navigate(ROUTES.HOME, {type: 'invoice_delete'})
+
+    obj.status = 'faild';
+    await AsyncStorage.setItem('invoices', JSON.stringify([...array]))
+    setShowOptionsModal(false)
+  }
+
+  const downloadPDFInvoice = () => {
+    alert('Download PDF Invoice')
+  }
+
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+  const onRefresh = useCallback(() => {
+    getInvoiceData()
+    setRefreshing(true);
+    wait(20).then(() => setRefreshing(false));
+  }, []);
+
   useEffect(() => {
     getDate()
+    getInvoiceData()
   }, [])
 
   return (
-    <SafeAreaView>
-      <View style={styles.wrapper}>
+    <>
+    {
+      (loading)?<Loading />:
+      <SafeAreaView>
+      <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+       style={styles.wrapper}>
         <View style={styles.InvoiceDetailsHeader}>
+          <TouchableOpacity style={styles.optionsBtn} onPress={()=>openOptionsModal()}>
+            <Entypo name='dots-three-horizontal' color={COLORS.white} size={25} />
+          </TouchableOpacity>
           <View style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20}}>
-            <Text style={styles.headerText}>{(invoice.title).toUpperCase()}</Text>
-            <Text style={styles.headerText}>#{invoice.invoice_number}</Text>
+            <Text style={styles.headerText}>{invoiceDetails.title.toUpperCase()}</Text>
+            <Text style={styles.headerText}>#{invoiceDetails.invoice_number}</Text>
           </View>
-          <Text style={[styles.invoiceStatus, {backgroundColor: (invoice.status != 'paid')?invoice.color+'56':COLORS.white+'56',borderLeftColor: (invoice.status != 'paid')?invoice.color:COLORS.white}]}>{(invoice.status).toUpperCase()}</Text>
+          <Text style={[styles.invoiceStatus, {backgroundColor: (invoiceDetails.status != 'paid')?invoiceDetails.color+'56':COLORS.white+'56',borderLeftColor: (invoiceDetails.status != 'paid')?invoiceDetails.color:COLORS.white}]}>{((invoiceDetails.status == 'faild')?'Cancelled':invoiceDetails.status).toUpperCase()}</Text>
         </View>
         <Text style={[styles.before, styles.beforeRight]}></Text>
         <View style={styles.invoiceDetails}>
@@ -50,7 +149,7 @@ const InvoiceDetails = (props) => {
           <View style={styles.headerDetails}>
             <View>
               <Text style={styles.label}>ORDER #</Text>
-              <Text style={[styles.descText, {backgroundColor: '#'+invoice.invoice_number+'56', padding: 3, borderRadius: 5}]}>#{invoice.invoice_number}</Text>
+              <Text style={[styles.descText, {backgroundColor: '#'+invoiceDetails.invoice_number+'56', padding: 3, borderRadius: 5}]}>#{invoiceDetails.invoice_number}</Text>
             </View>
             <View>
               <Text style={styles.label}>DUE ON #</Text>
@@ -71,13 +170,13 @@ const InvoiceDetails = (props) => {
           </View>
           <View style={styles.totalAmount}>
             <Text style={styles.totalText}>TOTAL AMOUNT</Text>
-            <Text style={styles.totalPrice}>EGP {invoice.price}</Text>
+            <Text style={styles.totalPrice}>EGP {invoiceDetails.price}</Text>
           </View>
         </View>
         <View style={styles.invoiceItems}>
           <TouchableOpacity style={styles.sectionHead} onPress={()=> showProducts()}>
             <View style={styles.sectionTitle}>
-              <Text style={styles.sectionTitleText}>Invoice Products ({invoice.items.length})</Text>
+              <Text style={styles.sectionTitleText}>Invoice Products ({invoiceDetails.items.length})</Text>
             </View>
             <EvilIcons name={`chevron-${showInvProducts?'up':'down'}`} size={25} color={COLORS.main_color} />
           </TouchableOpacity>
@@ -90,14 +189,19 @@ const InvoiceDetails = (props) => {
           </View> */}
           {
             (showInvProducts)?
-            <View style={{height: 250}}>
+            <View style={{maxHeight: 250}}>
               <ScrollView style={{backgroundColor: COLORS.white}}>
               {
-                invoice.items.map((item, index) => {
+                invoiceDetails.items.map((item, index) => {
                   return(
-                    <View key={item.id} style={[styles.invoiceItem, (invoice.items.length == index+1)?{borderBottomWidth: 0}:'']}>
-                      <Text style={{color:COLORS.black}}>{index+1}# {item.name}</Text>
-                      <Text style={{color:COLORS.black}}>EGP {item.price*item.quantity} (x{item.quantity})</Text>
+                    <View key={item.id} style={[styles.invoiceItem, (invoiceDetails.items.length == index+1)?{borderBottomWidth: 0}:'']}>
+                      <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{width: 30, height: 30, marginRight: 10, backgroundColor: COLORS.main_bg, padding: 5, borderRadius: 5}}>
+                          <Image source={(item.image)?{uri: item.image}: Cart} style={{width: '100%', height: '100%'}}/>
+                        </View>
+                        <Text style={{color:COLORS.black}}>{index+1}# {item.name}</Text>
+                      </View>
+                      <Text style={{color:COLORS.black}}>EGP {(item.offer_status == 1)?item.offer_price:item.price*item.quantity} (x{item.quantity})</Text>
                     </View>
                   )
                 })
@@ -106,9 +210,62 @@ const InvoiceDetails = (props) => {
             </View>:
           ''
           }
+          {
+            (invoiceDetails.status == 'pending')?
+            <TouchableOpacity style={styles.payBtn} onPress={()=> navigation.navigate(ROUTES.PAYMENT, {invoice: invoice, type: 'pending'})}>
+              <Text style={{color: COLORS.white, textAlign: 'center'}}>EGP {invoiceDetails.price} Containue to payment</Text>
+            </TouchableOpacity>:""
+          }
         </View>
-      </View>
+        <SwipeUpDownModal
+              modalVisible={showOptionsModal}
+              PressToanimate={animateOptionsModal}
+              // HeaderContent={
+              //   <View style={styles.containerHeader}>
+              //         <TouchableOpacity onPress={() => {
+              //               setanimateModal(false);
+              //               setShowModelComment(false);
+              //             }}>
+              //           <Entypo name='minus' color={COLORS.white} size={50} />
+              //         </TouchableOpacity>
+              //   </View>
+              // }
+              //if you don't pass HeaderContent you should pass marginTop in view of ContentModel to Make modal swipeable
+              ContentModal={
+                <View>
+                  <View style={styles.containerContent}>
+                      <TouchableOpacity style={styles.langBtn} onPress={() => downloadPDFInvoice()}>
+                        <FontAwesome name='file-pdf-o' color={COLORS.gray} size={15} style={{marginRight: 15}} />
+                        <Text style={{color: COLORS.gray}}>Download PDF</Text>
+                      </TouchableOpacity>
+                      {
+                        (invoiceDetails.status == 'pending')?
+                        <TouchableOpacity style={[styles.langBtn, {borderBottomWidth: 0}]} onPress={() => cancelInvoice(invoice)}>
+                        <EvilIcons name='close' color={COLORS.danger} size={20} style={{marginRight: 10}} />
+                        <Text style={{color: COLORS.gray}}>Cancel Invoice</Text>
+                      </TouchableOpacity>:
+                      <TouchableOpacity style={[styles.langBtn, {borderBottomWidth: 0}]} onPress={() => deleteInvoice(invoice)}>
+                      <EvilIcons name='trash' color={COLORS.danger} size={25} style={{marginRight: 10}} />
+                      <Text style={{color: COLORS.gray}}>Delete Invoice</Text>
+                    </TouchableOpacity>
+                      }
+                  </View>
+                  <TouchableOpacity style={styles.ModalBtnClose} onPress={()=> closePopupModal()}>
+                    <Text style={{color: COLORS.white, textAlign: 'center',fontWeight: 'bold'}}>Close</Text>
+                  </TouchableOpacity>
+                </View>
+              }
+              HeaderStyle={styles.headerContent}
+              ContentModalStyle={styles.Modal}
+              onClose={() => {
+                setShowOptionsModal(false);
+                setanimateOptionsModal(false);
+              }}
+            />
+      </ScrollView>
     </SafeAreaView>
+    }
+    </>
   );
 };
 
@@ -275,4 +432,51 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  payBtn:{
+    backgroundColor: COLORS.main_color,
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 10
+  },
+  optionsBtn:{
+    position: 'absolute',
+    right: 20,
+    top: 20
+  },
+  ///// Modal
+
+  containerContent: {
+    flex: 1,
+    width: FULL_WIDTH-40,
+    // height: 150,
+    margin: 20,
+    marginBottom: 10,
+    backgroundColor: COLORS.white,
+    borderRadius: 10
+  },
+  headerContent:{
+    marginTop: 0,
+    backgroundColor: COLORS.main_bg
+  },
+  Modal: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+  },
+  langBtn:{
+    padding: 20,
+    borderBottomColor: COLORS.main_bg,
+    borderBottomWidth: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  ModalBtnClose:{
+    backgroundColor: COLORS.danger,
+    margin: 20,
+    marginTop: 0,
+    width: FULL_WIDTH-40,
+    padding: 15,
+    borderRadius: 10
+  }
 });

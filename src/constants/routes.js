@@ -38,5 +38,13 @@ export default {
 
   PAYMENT: 'Payment',
 
-  SUCCESS: 'Success'
+  SUCCESS: 'Success',
+  
+  WELCOME: 'Welcome',
+
+  CATEGORIES: 'Categories',
+
+  CATEGORY_DETAILS: 'Category Details',
+
+  LOCATION: 'Location'
 };

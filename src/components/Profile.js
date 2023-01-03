@@ -37,7 +37,7 @@ const Profile = (props) => {
             <View style={styles.form}>
                 <View style={styles.row}>
                     <View style={styles.col_12}>
-                        <Text style={styles.label}>First Name</Text>
+                        <Text style={styles.label}>First Name {user.id}</Text>
                         <TextInput placeholder="First Name" style={styles.formInput} placeholderTextColor={COLORS.gray} value={(user)?user.first_name:''}/>
                     </View>
                     <View style={styles.col_12}>

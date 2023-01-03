@@ -14,7 +14,10 @@ import InvoicesData from '../../data.json';
 
 import Loading from '../../components/Loading';
 
+import NoResult from '../../components/NoResult';
+
 import axios from 'axios';
+import { sort_by_id } from '../../constants/helper';
 const FULL_WIDTH = Dimensions.get('window').width;
 const FULL_HEIGHT = Dimensions.get('window').height;
 
@@ -27,15 +30,22 @@ const Invoices = ({navigation}) => {
 
 
   const search = async () => {
+    setLoading(true)
       if(searchValue.value != ''){
         var value = searchValue.value.toUpperCase();
         const DATA_INVOICES = JSON.parse(await AsyncStorage.getItem('invoices'));
-        const searchData = DATA_INVOICES.filter(row => {
-          if(row.invoice_number.toString().toUpperCase().indexOf(value) !== -1){
-            return row;
-          }
-        })
-        setInvoices(searchData)
+        if(DATA_INVOICES != null){
+          const searchData = DATA_INVOICES.filter(row => {
+            if(row.invoice_number.toString().toUpperCase().indexOf(value) !== -1){
+              return row;
+            }
+          })
+          setInvoices(searchData)
+          setLoading(false)
+        }else{
+          setInvoices([])
+          setLoading(false)
+        }
       }
 
   }
@@ -43,7 +53,7 @@ const Invoices = ({navigation}) => {
   const getInvoices = async () => {
     const ALL_INVOICES = JSON.parse(await AsyncStorage.getItem('invoices'))
     if(ALL_INVOICES && ALL_INVOICES.length > 0){
-      setInvoices(ALL_INVOICES)
+      setInvoices(ALL_INVOICES.sort(sort_by_id()))
     }else{
       setInvoices([])
     }
@@ -75,28 +85,36 @@ const Invoices = ({navigation}) => {
     getInvoices();
   }, [])
   return (
+      (loading)?<Loading />:
     <View style={styles.invoices} >
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-            }
-          >
-            {
-              (loading)?<Loading />:
+      <View style={[styles.kasheedHeaer, (invoices.length <= 0)?{height: 200}:'']}>
+        {
+          (invoices.length > 0)?<View style={styles.search}>
+          <View style={styles.searchInput}>
+            <TextInput placeholderTextColor={COLORS.gray} style={styles.input} onChangeText={(text) => {setSearchValue({...searchValue, value: text})}} placeholder='Search Invoices ...'/>
+            <TouchableOpacity style={styles.searchIcon} onPress={() => search()}>
+              <EvilIcons name='search' size={25} color={COLORS.black} />
+            </TouchableOpacity>
+          </View>
+        </View>:""
+        }
+      </View>
+      {
+        (invoices.length <= 0)?<View style={{width: "100%", height: 200}}>
+        <NoResult module={'Invoices'} navigation={navigation}/>
+      </View>:""
+      }
+      
               <View style={styles.invoicesWrapper}>
-                <View style={styles.kasheedHeaer}>
-                  <View style={styles.search}>
-                    <View style={styles.searchInput}>
-                      <TextInput placeholderTextColor={COLORS.gray} style={styles.input} onChangeText={(text) => {setSearchValue({...searchValue, value: text})}} placeholder='Search Products ...'/>
-                      <TouchableOpacity style={styles.searchIcon} onPress={() => search()}>
-                        <EvilIcons name='search' size={25} color={COLORS.black} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
+                <ScrollView
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                  showsVerticalScrollIndicator={false}
+                >
                 {
                   (invoices.length > 0)?
                   invoices.map(row => {
@@ -112,13 +130,10 @@ const Invoices = ({navigation}) => {
                     return(
                         <InvoiceList data={row} key={row.id} navigation={navigation}/>
                     )
-                  }):<View style={{width: "100%"}}>
-                  <Text key={1} style={{borderWidth: 1, borderColor: COLORS.grayLight ,width: FULL_WIDTH-40 ,color: COLORS.gray,padding: 20, textAlign: 'center'}}>Products Not Found</Text>
-                </View>
+                  }):""
                 }
-              </View>
-            }
           </ScrollView>
+              </View>
         </View>
   );
 };
@@ -126,6 +141,10 @@ const Invoices = ({navigation}) => {
 export default Invoices;
 
 const styles = StyleSheet.create({
+  invoices:{
+    // marginTop: 20,
+    // marginHorizontal: 20,
+  },
   sectionHead:{
     display: 'flex',
     flexDirection: 'row',
@@ -149,24 +168,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   invoicesWrapper:{
-    marginTop: 20,
-    marginHorizontal: 20,
+    height: FULL_HEIGHT-100,
+    padding: 10
   },
   kasheedHeaer:{
     width: "100%",
     display: 'flex',
     justifyContent: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
+    backgroundColor: COLORS.main_color,
   },
   search:{
     display: 'flex',
     flexDirection: 'row',
-    width: '100%',
-    marginBottom: 20
+    margin: 10,
+    elevation: 8,
+    shadowColor: COLORS.gray
   },
   searchInput:{
     width: "100%",
-    marginRight: 10
   },
   input:{
     backgroundColor: COLORS.white,

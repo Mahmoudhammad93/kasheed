@@ -17,6 +17,7 @@ import {COLORS, ROUTES} from '../../constants';
 import Logo from '../../assets/icons/LOGO.png';
 import {useNavigation} from '@react-navigation/native';
 import Axios from 'react-native-axios/lib/core/Axios';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Data from '../../data.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from '../../components/Loading';
@@ -26,6 +27,7 @@ const Login = props => {
   const navigation = useNavigation();
   const [dataLogin, setDataLogin] = useState({email: '', password: ''});
   const [loading, setLoading] = useState(true);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const handleLogin = async () => {
     if(dataLogin.email != '' && dataLogin.password != ''){
@@ -76,6 +78,10 @@ const Login = props => {
     })
   }
 
+  const toggleSecureTextEntry = () => {
+    (secureTextEntry)?setSecureTextEntry(false):setSecureTextEntry(true)
+  }
+
   useEffect(() => {
     checkUser();
   }, [])
@@ -90,16 +96,22 @@ const Login = props => {
             {/* <Text style={styles.brandName}>Kasheed</Text> */}
           </View>
 
-          <Text style={styles.loginContinueTxt}>Login in to continue</Text>
+          <Text style={styles.loginContinueTxt}>Login to continue</Text>
           <TextInput style={styles.input} placeholder="Email" 
           onChangeText={(text) => {setDataLogin({...dataLogin, email: text})}}
           placeholderTextColor="#333"
           />
-          <TextInput style={styles.input} placeholder="Password" 
-          onChangeText={(text) => {setDataLogin({...dataLogin, password: text})}}
-          placeholderTextColor="#333"
-          />
-
+          <View>
+            <TextInput style={styles.input} placeholder="Password" 
+            onChangeText={(text) => {setDataLogin({...dataLogin, password: text})}}
+            placeholderTextColor="#333"
+            textContentType={'password'}
+            secureTextEntry={secureTextEntry}
+            />
+            <TouchableOpacity style={styles.eye} onPress={()=> toggleSecureTextEntry()}>
+              <FontAwesome name={(secureTextEntry)?"eye":"eye-slash"} size={20} />
+            </TouchableOpacity>
+          </View>
           <View style={styles.loginBtnWrapper}>
             <TouchableOpacity
                 onPress={() =>handleLogin()}
@@ -147,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    // backgroundColor: COLORS.white
   },
   container: {
     padding: 15,
@@ -179,6 +192,11 @@ const styles = StyleSheet.create({
     height: 55,
     paddingVertical: 0,
     color: '#333',
+  },
+  eye:{
+    position: 'absolute',
+    top: 25,
+    right: 20,
   },
   // Login Btn Styles
   loginBtnWrapper: {

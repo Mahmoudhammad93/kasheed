@@ -22,7 +22,7 @@ const Cart = ({navigation}) => {
     const getCartItems = async () => {
         const items = JSON.parse(await AsyncStorage.getItem('items'));
         const total = await AsyncStorage.getItem('total');
-        setCartItems(items)
+
         if (total) {
             if(JSON.parse(total) != "" && JSON.parse(total) != null){
               setItemsTotal(total);
@@ -31,9 +31,12 @@ const Cart = ({navigation}) => {
             }
         }
 
-        if(items.length > 0){
+        if(items != null && items.length > 0){
             setEmpty(false)
             setBtnDisabled(false)
+            setCartItems(items)
+        }else{
+            setCartItems([])
         }
 
         setLoading(false)
@@ -116,7 +119,7 @@ const Cart = ({navigation}) => {
                                 <AntDesign name='closecircle' size={30} color={COLORS.white}/>
                             </TouchableOpacity>
                             <TouchableOpacity disabled={btnDisabled} style={[styles.totalBtn, (btnDisabled)?{backgroundColor: "#70aef0"}:'']} onPress={() => navigation.navigate(ROUTES.PAYMENT)}>
-                                <Text style={{color: COLORS.main_bg, fontWeight: 'bold'}}>EGP {parseFloat(itemsTotal).toFixed(2)} Process</Text>
+                                <Text style={{color: COLORS.main_bg, fontWeight: 'bold'}}>{cartItems.length} Item EGP {parseFloat(itemsTotal).toFixed(2)} Process</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

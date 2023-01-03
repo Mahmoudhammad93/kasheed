@@ -16,6 +16,10 @@ export {default as Clients} from './home/Clients';
 export {default as Cart} from './kasheed/Cart';
 export {default as Payment} from './kasheed/Payment';
 export {default as Success} from './kasheed/Success';
+export {default as Welcome} from './home/Welcome';
+export {default as Categories} from './kasheed/Categories';
+export {default as CategoryDetails} from './kasheed/CategoryDetails';
+export {default as Location} from './home/Location';
 
 // Auth Screens
 export {default as Login} from './auth/Login';

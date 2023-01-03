@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {StyleSheet, Text, SafeAreaView, View, ScrollView, RefreshControl, TouchableOpacity, TextInput, Dimensions, Button} from 'react-native';
+import {StyleSheet, Image, Text, SafeAreaView, View, ScrollView, RefreshControl, TouchableOpacity, TextInput, Dimensions, Button} from 'react-native';
 import { COLORS } from '../../constants';
 import ProductComponent from '../../components/ProductDetails';
 import Data from '../../data.json';
@@ -14,6 +14,9 @@ import SwipeUpDownModal from 'react-native-swipe-modal-up-down';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PopupAlert from '../../components/PopupAlert';
+import { sort_by_id } from '../../constants/helper';
+import NoResult from '../../components/NoResult';
+import Search from '../../components/Search';
 
 const FULL_WIDTH = Dimensions.get('window').width;
 const FULL_HEIGHT = Dimensions.get('window').height;
@@ -22,23 +25,38 @@ const Products = ({navigation}) => {
   const [itemsTotal, setItemsTotal] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const [products, setProducts] = useState([]);
+  const [ifNoProducts, setIfNoProducts] = useState(true);
   const [loading, setLoading] = useState(true);
   let [ShowComment, setShowModelComment] = useState(false);
   let [animateModal, setanimateModal] = useState(false);
-  const [productData, setProductData] = useState({name: '', desc: '', price: '', offer_price: '', status: 2, offer_status: 1});
+  const [productData, setProductData] = useState({name: '', image: '', desc: '', price: '', offer_price: '', status: 2, offer_status: 1, category_id: ''});
   const [isModalVisible, setModalVisible] = useState(false);
   const [statusChecked, setStatusChecked] = useState(1);
   const [offerStatusChecked, setOfferStatusChecked] = useState(1);
-  const [searchValue, setSearchValue] = useState({value: ''});
+  const [searchValue, setSearchValue] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [showCategories, setShowCategories] = useState(false);
+  const [categoryName, setCategoryName] = useState('');
+  const [productImage, setProductImage] = useState("https://assets.gelecegenefes.com/images/no-image.jpeg");
 
   const getProducts = async () => {
     const PRODUCTS = JSON.parse(await AsyncStorage.getItem('products'))
     if(PRODUCTS && PRODUCTS.length > 0){
-      setProducts(PRODUCTS)
+      setProducts(PRODUCTS.sort(sort_by_id()))
+      setIfNoProducts(false)
     }else{
       setProducts([])
+      setIfNoProducts(true)
     }
+
+    const CATEGORIES = JSON.parse(await AsyncStorage.getItem('categories'))
+        if(CATEGORIES && CATEGORIES.length > 0){
+          setCategories(CATEGORIES.sort(sort_by_id()))
+        }else{
+          setCategories([])
+        }
   }
+
   const openModalPopup = () => {
     setModalVisible(true);
   };
@@ -61,7 +79,12 @@ const Products = ({navigation}) => {
   }
   const openGallery = async () => {
     const image = await launchImageLibrary(options)
-    console.log(image)
+    setProductImage(image.assets[0].uri)
+    setProductData({...productData, image: image.assets[0].uri})
+  }
+
+  const openModalFromNoResult = () => {
+    openModal()
   }
 
   const openModal = () => {
@@ -74,28 +97,28 @@ const Products = ({navigation}) => {
 
   const saveProduct = async () => {
     const PRODUCTS = JSON.parse(await AsyncStorage.getItem('products'));
-    if(PRODUCTS == null){
-      await AsyncStorage.setItem('products', JSON.stringify([]))
-    }
     console.log(PRODUCTS)
     const NEW_PRODUCT = {
-      id: PRODUCTS.length+1,
+      id: (PRODUCTS !== null)?PRODUCTS.length+1:1,
       name: productData.name,
+      image: productData.image,
       price: productData.price,
       offer_price: productData.offer_price,
       code: Math.floor(100000 + Math.random() * 900000),
       desc: productData.desc,
       status: productData.status,
-      offer_status: productData.offer_status
+      offer_status: productData.offer_status,
+      category_id: productData.category_id
     }
 
-
+console.log(NEW_PRODUCT)
     if(PRODUCTS.length <= 0){
       await AsyncStorage.setItem('products', JSON.stringify([NEW_PRODUCT]))
     }else{
       await AsyncStorage.setItem('products', JSON.stringify([...PRODUCTS, NEW_PRODUCT]))
     }
     openModalPopup()
+    setProductImage('https://assets.gelecegenefes.com/images/no-image.jpeg')
     onRefresh()
   }
 
@@ -109,18 +132,43 @@ const Products = ({navigation}) => {
     }
   }
 
+  const getSearchText = (value) => {
+    setSearchValue(value)
+  }
+
   const search = async () => {
-    if(searchValue.value != ''){
-      var value = searchValue.value.toUpperCase();
-      const DATA_PRODUCTS = JSON.parse(await AsyncStorage.getItem('products'));
-      const searchData = DATA_PRODUCTS.filter(row => {
-        if(row.name.toUpperCase().indexOf(value) !== -1){
-          return row;
-        }
-      })
-      setProducts(searchData)
+    // setLoading(true)
+    const DATA_PRODUCTS = JSON.parse(await AsyncStorage.getItem('products'));
+    if(searchValue !== ''){
+      var value = searchValue.toUpperCase();
+      if(DATA_PRODUCTS != null){
+        const searchData = DATA_PRODUCTS.filter(row => {
+          if(row.name.toUpperCase().indexOf(value) !== -1){
+            return row;
+          }
+        })
+        setProducts(searchData)
+        // setLoading(false)
+      }else{
+        setProducts([])
+        // setLoading(false)
+      }
     }
 
+  }
+
+  const selectCategory = async (id) => {
+    const CATEGORIES = JSON.parse(await AsyncStorage.getItem('categories'))
+
+    const cate = CATEGORIES.filter(row => {
+      if(row.id == id){
+        return row
+      }
+    })
+    console.log(cate)
+    setProductData({...productData, category_id:id})
+    setCategoryName(cate[0].name)
+    setShowCategories(false)
   }
 
   const wait = (timeout) => {
@@ -146,16 +194,18 @@ const Products = ({navigation}) => {
           <Loading />
         :
           <View style={{height: "100%"}}>
-            <View style={styles.kasheedHeaer}>
-              <View style={styles.search}>
-                <View style={styles.searchInput}>
-                  <TextInput placeholderTextColor={COLORS.gray} style={styles.input} onChangeText={(text) => {setSearchValue({...searchValue, value: text})}} placeholder='Search Products ...'/>
-                  <TouchableOpacity style={styles.searchIcon} onPress={() => search()}>
-                    <EvilIcons name='search' size={25} color={COLORS.black} />
-                  </TouchableOpacity>
-                </View>
-              </View>
+            <View style={[styles.searchHeaer, (ifNoProducts)?{height: 200}:""]}>
+              {
+                (!ifNoProducts)?
+                <Search search={search} module={'Products'} getSearchText={getSearchText}/>
+                :""
+              }
             </View>
+            {
+              (ifNoProducts)?<View style={{width: "100%", height: 200}}>
+              <NoResult module={'Products'} openModalFromNoResult={openModalFromNoResult}/>
+          </View>:''
+            }
             <ScrollView
             style={styles.productsContainer}
               refreshControl={
@@ -170,11 +220,9 @@ const Products = ({navigation}) => {
                   (products.length > 0)?
                   products.map((row, index) => {
                     return(
-                      <ProductComponent key={index+1} product={row} updateTotal={updateTotal} navigation={navigation}/>
+                      <ProductComponent key={row.id} product={row} updateTotal={updateTotal} navigation={navigation}/>
                     )
-                  }):<View style={{width: "100%"}}>
-                    <Text key={1} style={{borderWidth: 1, borderColor: COLORS.grayLight ,width: FULL_WIDTH-20 ,color: COLORS.gray,padding: 20, textAlign: 'center'}}>Products Not Found</Text>
-                  </View>
+                  }):""
                 }
               </View>
             </ScrollView>
@@ -183,12 +231,7 @@ const Products = ({navigation}) => {
               PressToanimate={animateModal}
               // HeaderContent={
               //   <View style={styles.containerHeader}>
-              //         <TouchableOpacity onPress={() => {
-              //               setanimateModal(false);
-              //               setShowModelComment(false);
-              //             }}>
-              //           <Entypo name='minus' color={COLORS.white} size={50} />
-              //         </TouchableOpacity>
+              //         <Text style={{color: COLORS.gray, fontWeight: 'bold', fontSize: 20}}>Add Product</Text>
               //   </View>
               // }
               //if you don't pass HeaderContent you should pass marginTop in view of ContentModel to Make modal swipeable
@@ -197,8 +240,10 @@ const Products = ({navigation}) => {
                   <View style={styles.row}>
                         <View style={styles.col_6}>
                           <TouchableOpacity style={styles.selectImageBtn} onPress={() => openGallery()}>
-                            <Entypo name='image' size={30} color={COLORS.grayLight} />
-                            <Text style={{color: COLORS.grayLight}}>Select Image</Text>
+                            <View style={styles.formImage}>
+                              <Image style={{width: '100%', height: '100%', resizeMode: 'cover'}} source={{uri:productImage}} />
+                            </View>
+                            <Text style={{color: COLORS.gray, fontWeight: 'bold', position: 'relative', top: 50}}>Select Image</Text>
                           </TouchableOpacity>
                         </View>
                         <View style={styles.col_12}>
@@ -217,6 +262,30 @@ const Products = ({navigation}) => {
                             />
                         </View>
                         <View style={styles.col_6}>
+                          <TextInput placeholder="Category" style={styles.formInput} placeholderTextColor={COLORS.gray}
+                            onChangeText={(text) => {setProductData({...productData, category_id: text})}}
+                            onFocus={()=> setShowCategories(true)}
+                            // onBlur={()=> setShowCategories(false)}
+                            value={categoryName}
+                            />
+                            {
+                              (showCategories)?<View style={styles.cateResult}>
+                              <ScrollView>
+                              {
+                                categories.map(cate => {
+                                  if(cate.status !== 0)
+                                    return(
+                                      <TouchableOpacity key={cate.id} style={styles.resultOption} onPress={()=> selectCategory(cate.id)}>
+                                        <Text style={{color: COLORS.gray}}>{cate.name}</Text>
+                                      </TouchableOpacity>
+                                    )
+                                })
+                              }
+                              </ScrollView>
+                            </View>:''
+                            }
+                        </View>
+                        <View style={styles.col_12}>
                             <TextInput placeholder="Offer Price" keyboardType='numeric' style={styles.formInput} placeholderTextColor={COLORS.gray}
                             onChangeText={(text) => {setProductData({...productData, offer_price: text})}}
                             />
@@ -297,11 +366,14 @@ const Products = ({navigation}) => {
               }}
             />
              <PopupAlert modelText={'Product Added Susseful'} closeModal={closeModal} isModalVisible={isModalVisible}/>
-            <View style={styles.addBrn}>
-              <TouchableOpacity style={styles.btn} onPress={() => openModal()}>
-                <AntDesign name='plus' size={30} color={COLORS.white} />
-              </TouchableOpacity>
-            </View>
+             {
+              (!ifNoProducts)?
+              <View style={styles.addBrn}>
+                <TouchableOpacity style={styles.btn} onPress={() => openModal()}>
+                  <AntDesign name='plus' size={30} color={COLORS.white} />
+                </TouchableOpacity>
+              </View>:""
+             }
           </View>
       }
     </SafeAreaView>
@@ -343,10 +415,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    top: 350,
+    top: FULL_HEIGHT-700,
     width: "100%",
     backgroundColor: COLORS.main_bg,
     zIndex: 10,
+    padding: 10
   },
   headerContent:{
     marginTop: 0,
@@ -394,6 +467,14 @@ formInput:{
     color: COLORS.gray,
     paddingHorizontal: 20
 },
+formImage:{
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  zIndex: 99999
+},
 pr_10:{
   paddingRight: 10
 },
@@ -433,12 +514,13 @@ radioBtnCircleBefore:{
   height: 12,
   backgroundColor: COLORS.main_color
 },
-kasheedHeaer:{
+searchHeaer:{
   width: "100%",
   backgroundColor: COLORS.main_color,
   display: 'flex',
   justifyContent: 'center',
-  alignContent: 'center'
+  alignContent: 'center',
+  // overflow: 'hidden'
 },
 search:{
   display: 'flex',
@@ -464,4 +546,20 @@ searchIcon:{
   padding: 10,
   borderRadius: 5
 },
+cateResult:{
+  position: 'absolute',
+  backgroundColor: COLORS.white,
+  top: 52,
+  width: "100%",
+  zIndex: 9999,
+  shadowColor: COLORS.gray,
+  elevation: 5,
+  height: 200,
+  borderRadius: 5,
+  overflow: 'hidden'
+},
+resultOption:{
+  padding: 10,
+  marginBottom: 1
+}
 });

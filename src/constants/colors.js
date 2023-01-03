@@ -13,5 +13,6 @@ export default {
   main_bg: '#f1f1f1',
   active_color: '#5fdba7',
   warning_color: '#FFCC00',
-  second_bg: "#f7f7f7"
+  second_bg: "#f7f7f7",
+  blackLight: "#333333"
 };
