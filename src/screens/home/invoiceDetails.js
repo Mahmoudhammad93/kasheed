@@ -123,14 +123,7 @@ const InvoiceDetails = ({navigation, ...props}) => {
     {
       (loading)?<Loading />:
       <SafeAreaView>
-      <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
-      }
-       style={styles.wrapper}>
+      <View style={styles.wrapper}>
         <View style={styles.InvoiceDetailsHeader}>
           <TouchableOpacity style={styles.optionsBtn} onPress={()=>openOptionsModal()}>
             <Entypo name='dots-three-horizontal' color={COLORS.white} size={25} />
@@ -190,7 +183,7 @@ const InvoiceDetails = ({navigation, ...props}) => {
           {
             (showInvProducts)?
             <View style={{maxHeight: 250}}>
-              <ScrollView style={{backgroundColor: COLORS.white}}>
+              <ScrollView style={{backgroundColor: COLORS.white, paddingBottom: 30}}>
               {
                 invoiceDetails.items.map((item, index) => {
                   return(
@@ -262,7 +255,7 @@ const InvoiceDetails = ({navigation, ...props}) => {
                 setanimateOptionsModal(false);
               }}
             />
-      </ScrollView>
+      </View>
     </SafeAreaView>
     }
     </>

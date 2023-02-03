@@ -90,12 +90,13 @@ const Payment = ({navigation, ...props}) => {
 
         if(currentInvoicesArray != null){
             var itemIndex = currentInvoicesArray.length;
-            var latestInvoice = currentInvoicesArray.slice(itemIndex-1, itemIndex);
-            var invoiceID = latestInvoice[0].id+1;
+            var lastInvoice = currentInvoicesArray.slice(itemIndex-1, itemIndex);
+            var invoiceID = lastInvoice[0].id+1;
 
         }else{
             var invoiceID = 1;
         }
+        
 
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');

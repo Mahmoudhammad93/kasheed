@@ -43,9 +43,12 @@ const KasheedHome = ({navigation}) => {
       setCategories([])
     }
 
+    var ids = PRODUCTS.map(row => row.id);
+    console.log(ids)
     if(PRODUCTS != null && PRODUCTS.length > 0){
       if(PRODUCTS.length > 12){
-        setProducts(PRODUCTS.slice(0, 12)).sort(sort_by_id())
+        setProducts(PRODUCTS.slice(0, 12))
+        // .sort(sort_by_id())
       }else{
         setProducts(PRODUCTS)
       }
@@ -90,7 +93,7 @@ const KasheedHome = ({navigation}) => {
   }
 
   const search = async () => {
-    setLoading(true)
+    // setLoading(true)
     const DATA_PRODUCTS = JSON.parse(await AsyncStorage.getItem('products'));
     if(searchValue.value != ''){
       var value = searchValue.value.toUpperCase();
@@ -104,7 +107,7 @@ const KasheedHome = ({navigation}) => {
         setLoading(false)
       }else{
         setProducts([])
-        setLoading(false)
+        // setLoading(false)
       }
     }else{
       setProducts(DATA_PRODUCTS)

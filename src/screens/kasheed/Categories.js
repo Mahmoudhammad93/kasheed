@@ -105,7 +105,6 @@ const Categories = ({navigation, ...props}) => {
             await AsyncStorage.setItem('categories', JSON.stringify([NEW_CATEGORY]))
         }
         openModalPopup()
-        setCategoryImage({...categoryData, image: 'https://assets.gelecegenefes.com/images/no-image.jpeg'})
         onRefresh()
     }
 

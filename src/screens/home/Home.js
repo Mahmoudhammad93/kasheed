@@ -14,6 +14,10 @@ import Loading from '../../components/Loading';
 import { sort_by_id } from '../../constants/helper';
 import NotFound from '../../components/NotFound';
 import LocationPin from '../../assets/icons/location.png';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import Skeleton from "@thevsstech/react-native-skeleton";
+
+import MaskedView from '@react-native-masked-view/masked-view';
 
 import Data from '../../data.json';
 import InvoiceList from '../../components/InvoiceList';
@@ -60,7 +64,7 @@ const Home = ({navigation, ...props}) => {
     if(invoices != null && invoices.length > 0){
       setAllInvoices(invoices)
       if(invoices.length > 5){
-        setLatestInvoices(invoices.slice(invoices.length-6, invoices.length).sort(sort_by_id()))
+        setLatestInvoices(invoices.slice(invoices.length-5, invoices.length).sort(sort_by_id()))
       }else{
         setLatestInvoices(invoices.sort(sort_by_id()))
       }
@@ -89,7 +93,130 @@ const Home = ({navigation, ...props}) => {
     getData();
   },[])
   return (
-    (loading)?<Loading />:
+    (loading)?<SafeAreaView>
+      <View style={{paddingVertical: 40}}>
+        
+        <View style={{width: FULL_WIDTH,marginBottom: 20}}>
+          <Skeleton>
+            <Skeleton.Item flexDirection="row" alignItems="center">
+              {/* <Skeleton.Item width={60} height={60} borderRadius={50} /> */}
+              <Skeleton.Item marginLeft={20}>
+                <Skeleton.Item width={FULL_WIDTH-50} height={50} borderRadius={4} />
+                <Skeleton.Item
+                  marginTop={6}
+                  width={FULL_WIDTH-150}
+                  height={20}
+                  borderRadius={4}
+                />
+              </Skeleton.Item>
+            </Skeleton.Item>
+          </Skeleton>
+        </View>
+
+        <View style={{width: FULL_WIDTH,marginBottom: 20}}>
+          <Skeleton>
+            <Skeleton.Item flexDirection="row" alignItems="center">
+              {/* <Skeleton.Item width={60} height={60} borderRadius={50} /> */}
+              <Skeleton.Item marginLeft={20}>
+                <Skeleton.Item width={FULL_WIDTH-50} height={50} borderRadius={4} />
+                <Skeleton.Item
+                  marginTop={6}
+                  width={FULL_WIDTH-150}
+                  height={20}
+                  borderRadius={4}
+                />
+              </Skeleton.Item>
+            </Skeleton.Item>
+          </Skeleton>
+        </View>
+        
+        <View style={{width: FULL_WIDTH,marginBottom: 20}}>
+          <Skeleton>
+            <Skeleton.Item flexDirection="row" alignItems="center">
+              {/* <Skeleton.Item width={60} height={60} borderRadius={50} /> */}
+              <Skeleton.Item marginLeft={20}>
+                <Skeleton.Item width={FULL_WIDTH-50} height={50} borderRadius={4} />
+                <Skeleton.Item
+                  marginTop={6}
+                  width={FULL_WIDTH-150}
+                  height={20}
+                  borderRadius={4}
+                />
+              </Skeleton.Item>
+            </Skeleton.Item>
+          </Skeleton>
+        </View>
+
+        <View style={{width: FULL_WIDTH,marginBottom: 20}}>
+          <Skeleton>
+            <Skeleton.Item flexDirection="row" alignItems="center">
+              {/* <Skeleton.Item width={60} height={60} borderRadius={50} /> */}
+              <Skeleton.Item marginLeft={20}>
+                <Skeleton.Item width={FULL_WIDTH-50} height={50} borderRadius={4} />
+                <Skeleton.Item
+                  marginTop={6}
+                  width={FULL_WIDTH-150}
+                  height={20}
+                  borderRadius={4}
+                />
+              </Skeleton.Item>
+            </Skeleton.Item>
+          </Skeleton>
+        </View>
+
+        <View style={{width: FULL_WIDTH,marginBottom: 20}}>
+          <Skeleton>
+            <Skeleton.Item flexDirection="row" alignItems="center">
+              {/* <Skeleton.Item width={60} height={60} borderRadius={50} /> */}
+              <Skeleton.Item marginLeft={20}>
+                <Skeleton.Item width={FULL_WIDTH-50} height={50} borderRadius={4} />
+                <Skeleton.Item
+                  marginTop={6}
+                  width={FULL_WIDTH-150}
+                  height={20}
+                  borderRadius={4}
+                />
+              </Skeleton.Item>
+            </Skeleton.Item>
+          </Skeleton>
+        </View>
+
+        <View style={{width: FULL_WIDTH,marginBottom: 20}}>
+          <Skeleton>
+            <Skeleton.Item flexDirection="row" alignItems="center">
+              {/* <Skeleton.Item width={60} height={60} borderRadius={50} /> */}
+              <Skeleton.Item marginLeft={20}>
+                <Skeleton.Item width={FULL_WIDTH-50} height={50} borderRadius={4} />
+                <Skeleton.Item
+                  marginTop={6}
+                  width={FULL_WIDTH-150}
+                  height={20}
+                  borderRadius={4}
+                />
+              </Skeleton.Item>
+            </Skeleton.Item>
+          </Skeleton>
+        </View>
+
+        <View style={{width: FULL_WIDTH,marginBottom: 20}}>
+          <Skeleton>
+            <Skeleton.Item flexDirection="row" alignItems="center">
+              {/* <Skeleton.Item width={60} height={60} borderRadius={50} /> */}
+              <Skeleton.Item marginLeft={20}>
+                <Skeleton.Item width={FULL_WIDTH-50} height={50} borderRadius={4} />
+                <Skeleton.Item
+                  marginTop={6}
+                  width={FULL_WIDTH-150}
+                  height={20}
+                  borderRadius={4}
+                />
+              </Skeleton.Item>
+            </Skeleton.Item>
+          </Skeleton>
+        </View>
+
+      </View>
+    </SafeAreaView>:
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
         <View style={[styles.header, (lang == 'ar')?{flexDirection: 'row-reverse'}:'']}>
@@ -144,15 +271,15 @@ const Home = ({navigation, ...props}) => {
               <EvilIcon name='chevron-right' size={25} color={COLORS.main_color} />
             </TouchableOpacity>
           </View>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-            }
-          >
-            <View style={styles.invoicesWrapper}>
+          <View style={styles.invoicesWrapper}>
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              }
+            >
               {
                 (latestInvoices && latestInvoices.length > 0)?latestInvoices.map(row => {
                 if(row.status === 'active'){
@@ -173,8 +300,8 @@ const Home = ({navigation, ...props}) => {
                   {/* <Text>{leftValue}</Text> */}
                 </View>
               }
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
         </View>
         <SwipeUpDownModal
               modalVisible={ShowLocation}
@@ -298,6 +425,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 5,
     marginBottom: 230,
+    maxHeight: 500
   },
   // invoice:{
   //   backgroundColor: COLORS.white,

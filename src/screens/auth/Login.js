@@ -109,7 +109,7 @@ const Login = props => {
             secureTextEntry={secureTextEntry}
             />
             <TouchableOpacity style={styles.eye} onPress={()=> toggleSecureTextEntry()}>
-              <FontAwesome name={(secureTextEntry)?"eye":"eye-slash"} size={20} />
+              <FontAwesome name={(secureTextEntry)?"eye":"eye-slash"} size={20} color={COLORS.grayLight}/>
             </TouchableOpacity>
           </View>
           <View style={styles.loginBtnWrapper}>

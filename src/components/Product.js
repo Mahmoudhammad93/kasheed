@@ -103,7 +103,7 @@ const Product = (props) => {
             </View>
             <View style={styles.productDetails}>
                 <Text style={styles.productName} numberOfLines={1}>
-                {product.name}
+                {product.name} 
                 </Text>
                 <Text style={[styles.productPrice, (product.offer_status == 1)?{color: COLORS.grayLight, textDecorationLine: 'line-through', fontSize: 12}:'']}>
                 EGP {parseFloat(product.price).toFixed(2)}

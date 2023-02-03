@@ -28,11 +28,19 @@ const Category = ({navigation, ...props}) => {
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [allCategories, setAllCategories] = useState([]);
+    const [showFilter, setShowFilter] = useState(false);
 
     const CATEGORY = props.route.params.category;
 
     const getCategoryData = async () => {
         const PRODUCS = JSON.parse(await AsyncStorage.getItem('products'));
+        const CATEGORIES = JSON.parse(await AsyncStorage.getItem('categories'));
+
+        if(CATEGORIES !== null && CATEGORIES.length > 0){
+            setAllCategories(CATEGORIES)
+        }
+
         setCategoryData(props.route.params.category)
         if(PRODUCS !== null && PRODUCS.length > 0){
             const CATE_PRODUCTS = PRODUCS.filter(row => {
@@ -119,6 +127,31 @@ const Category = ({navigation, ...props}) => {
         }
     }
 
+    const selectFilterOption = async (id) => {
+        setShowFilter(false)
+        setLoadingMore(true)
+        const CATEGORIES = JSON.parse(await AsyncStorage.getItem('categories'))
+
+        const CATE_OBJ = CATEGORIES.filter(row => {
+            if(row.id == id){
+                return row;
+            }
+        })
+
+        setCategoryData(CATE_OBJ[0])
+
+        const PRODUCS = JSON.parse(await AsyncStorage.getItem('products'));
+        if(PRODUCS !== null && PRODUCS.length > 0){
+            const CATE_PRODUCTS = PRODUCS.filter(row => {
+                if(row.category_id == id){
+                    return row;
+                }
+            })
+            setProducts(CATE_PRODUCTS)
+            setLoadingMore(false)
+        }
+    }
+
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
     }
@@ -149,12 +182,30 @@ const Category = ({navigation, ...props}) => {
                             <TouchableOpacity style={[styles.nextPrevBtns ,styles.prev]} onPress={()=> prevCategory(categoryData.id)}>
                                 <EvilIcons name="chevron-left" size={25} color={COLORS.main_color} />
                             </TouchableOpacity>
-                            <Text style={{color: COLORS.gray, textAlign: 'center'}}>{categoryData.name} - {categoryData.id}</Text>
+                            <TouchableOpacity style={{width: '80%', height: '100%', display: 'flex', alignItems: 'center'}} onPress={()=> setShowFilter((showFilter == true)?false:true)}>
+                                <Text style={{color: COLORS.gray, textAlign: 'center', lineHeight: 40}}>{categoryData.name}</Text>
+                            </TouchableOpacity>
                             <TouchableOpacity style={[styles.nextPrevBtns ,styles.next]} onPress={()=> nextCategory(categoryData.id)}>
                                 <EvilIcons name="chevron-right" size={25} color={COLORS.main_color} />
                             </TouchableOpacity>
                         </View>
                     </View>
+                    {
+                        (showFilter)?
+                        <View style={styles.cateFilter}>
+                            <ScrollView>
+                            {
+                                allCategories.map((row, index) => {
+                                    return(
+                                        <TouchableOpacity key={row.id} style={[styles.filterOptions, (allCategories.length == index+1)?{borderBottomWidth: 0}:'']} onPress={()=> selectFilterOption(row.id)}>
+                                            <Text style={{color: COLORS.gray, textAlign: 'center'}}>{row.name}</Text>
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
+                            </ScrollView>
+                        </View>:''
+                    }
                     {
                         (loadingMore)? <LoadingMore />:""
                     }
@@ -249,5 +300,22 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         marginBottom: 10,
     },
+    cateFilter:{
+        backgroundColor: COLORS.white,
+        shadowColor: COLORS.gray,
+        elevation: 2,
+        width: "50%",
+        position: 'absolute',
+        top: 240,
+        left: FULL_WIDTH/4,
+        zIndex: 9999999,
+        borderRadius: 5,
+        maxHeight: 500,
+    },
+    filterOptions:{
+        padding: 10,
+        borderBottomColor: COLORS.main_bg,
+        borderBottomWidth: 1
+    }
     
 })

@@ -42,7 +42,7 @@ const InvoiceList = (props) => {
                 <Text style={[styles.invoiceNumber, {backgroundColor: "#"+props.data.invoice_number+'56'}]}>#{props.data.invoice_number}</Text>
             </View>
             <View style={styles.invoiceDetails}>
-                <Text style={styles.invoiceTitle} numberOfLines={2}>{props.data.title}</Text>
+                <Text style={styles.invoiceTitle} numberOfLines={2}>{props.data.title} - {props.data.id}</Text>
                 <Text style={[styles.invoiceStatus, styles.paidStatus, {backgroundColor: props.data.color, color: (props.data.status === 'pending')?COLORS.black:COLORS.white}]}>{(props.data.status == 'faild')?'Cancelled':props.data.status}</Text>
             </View>
         </View>

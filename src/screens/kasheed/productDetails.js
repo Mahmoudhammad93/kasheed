@@ -68,6 +68,9 @@ const ProductDetails = (props) => {
   }
 
   const editProduct = () => {
+    if(product.image){
+      setProductImage(product.image)
+    }
     setProductData(product)
     setShowModelComment(true)
   }
